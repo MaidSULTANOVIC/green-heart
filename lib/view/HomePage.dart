@@ -24,7 +24,15 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _currentIndex == 0 ? null : AppBar(title: Text("Test")),
+      appBar: _currentIndex == 0
+          ? null
+          : AppBar(
+              elevation: 0.0,
+              backgroundColor: Colors.white,
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: Text("Test", style: TextStyle(color: Color(0xFF2D2F30)))),
+      backgroundColor: Colors.white,
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Color(0xFF36DC55),
