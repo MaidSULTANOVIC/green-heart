@@ -51,15 +51,14 @@ class _LoginViewState extends State<LoginView> {
                     SizedBox(
                       height: 35.0,
                     ),
-                    loginButton(
-                        style, context, emailAuth.text, passwordAuth.text),
+                    loginButton(style, context, emailAuth, passwordAuth),
                     SizedBox(
                       height: 5.0,
                     ),
                     TextButton(
                       child: Text("Register",
                           style: TextStyle(color: Colors.white)),
-                      onPressed: () async {
+                      onPressed: () {
                         // If he clicks on Register button, he's redirected to the register View
                         Get.to(() => RegisterView());
                       },

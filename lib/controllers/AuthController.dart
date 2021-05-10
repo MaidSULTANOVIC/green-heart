@@ -6,6 +6,7 @@ import 'package:green_heart/view/HomePage.dart';
 class AuthenticationController extends GetxController {
   void login(String emailAuth, String passwordAuth) async {
     try {
+      print(emailAuth + "//" + passwordAuth);
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailAuth, password: passwordAuth)
           .then((value) => Get.off(() => HomePageView()));
@@ -18,7 +19,7 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  void register(String emailAuth, String passwordAuth) async {
+  Future<void> register(String emailAuth, String passwordAuth) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(

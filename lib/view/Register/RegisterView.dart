@@ -22,10 +22,10 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF36DC55),
       body: Center(
         child: Container(
-          color: Colors.white,
+          color: Color(0xFF36DC55),
           child: Padding(
             padding: const EdgeInsets.all(36.0),
             child: SingleChildScrollView(
@@ -41,14 +41,12 @@ class _RegisterViewState extends State<RegisterView> {
                   SizedBox(
                     height: 35.0,
                   ),
-                  registerButton(
-                      style, context, emailAuth.text, passwordAuth.text),
+                  registerButton(style, context, emailAuth, passwordAuth),
                   SizedBox(
                     height: 15.0,
                   ),
                   TextButton(
-                    child: Text("Login",
-                        style: TextStyle(color: Color(0xFFF7980D))),
+                    child: Text("Login", style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       Navigator.pop(context);
                     },

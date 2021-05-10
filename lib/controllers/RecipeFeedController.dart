@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/models/Recipe.dart';
+import 'package:green_heart/view/Login/LoginView.dart';
 import 'package:http/http.dart' as http;
 
 class RecipeFeedController extends GetxController {
@@ -13,12 +15,18 @@ class RecipeFeedController extends GetxController {
 
   @override
   void onInit() {
+    FirebaseAuth.instance.authStateChanges().listen((User user) async {
+      if (user == null) {
+        Get.off(() => LoginView());
+      } else {}
+    });
+
     _futureRecipe = fetchRecipe();
     super.onInit();
   }
 
-  void addPoint() {
-    test.value++;
+  void disconnect() {
+    FirebaseAuth.instance.signOut();
   }
 
   Future<Recipe> fetchRecipe() async {

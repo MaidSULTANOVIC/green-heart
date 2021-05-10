@@ -39,9 +39,9 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
                         fontWeight: FontWeight.w600)),
               ),
               FlatButton(
-                  onPressed: () async => await FirebaseAuth.instance
-                      .signOut()
-                      .then((value) => Get.off(LoginView)),
+                  onPressed: () {
+                    c.disconnect();
+                  },
                   child: Icon(Icons.dangerous)),
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, top: 16.0),
