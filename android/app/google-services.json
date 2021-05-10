@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "648472917598",
+    "project_id": "greenheart-10e87",
+    "storage_bucket": "greenheart-10e87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648472917598:android:026abb286daf8bcb1426cf",
+        "android_client_info": {
+          "package_name": "com.example.green_heart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648472917598-7ad1gko0d76vi6st8e7rbd07v77f1ltb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOcbTOXU5y16wEI9a3YWB8AhO4u8J62Zc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648472917598-7ad1gko0d76vi6st8e7rbd07v77f1ltb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
