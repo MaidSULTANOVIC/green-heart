@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/view/HomePage.dart';
 import 'package:green_heart/view/Login/LoginView.dart';
+import 'package:flutter/foundation.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,6 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
+    if (kReleaseMode) {
+      // is in Release Mode ?
+      print('Release');
+    } else {
+      print('Debug');
+    }
     return FutureBuilder(
       // Initialize FlutterFire:
       future: _initialization,

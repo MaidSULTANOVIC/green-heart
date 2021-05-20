@@ -52,6 +52,11 @@ class _LoginViewState extends State<LoginView> {
                       height: 35.0,
                     ),
                     loginButton(style, context, emailAuth, passwordAuth),
+                    FlatButton(
+                        onPressed: () {
+                          c.signInWithGoogle2();
+                        },
+                        child: Text("Google signin")),
                     SizedBox(
                       height: 5.0,
                     ),

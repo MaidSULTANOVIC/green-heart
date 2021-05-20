@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:648472917598:android:026abb286daf8bcb1426cf",
+        "mobilesdk_app_id": "1:648472917598:android:2ef6b2b19da351a51426cf",
         "android_client_info": {
-          "package_name": "com.example.green_heart"
+          "package_name": "com.sprm.green_heart"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "648472917598-3gcu9p8iiua1tnnpnf8q5tqe0v5cdmp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sprm.green_heart",
+            "certificate_hash": "e19564633a58fdd823884db6f62faefa62401560"
+          }
+        },
         {
           "client_id": "648472917598-7ad1gko0d76vi6st8e7rbd07v77f1ltb.apps.googleusercontent.com",
           "client_type": 3

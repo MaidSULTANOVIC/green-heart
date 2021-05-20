@@ -5,6 +5,15 @@ import 'package:get/get.dart';
 import 'package:green_heart/models/Recipe.dart';
 import 'package:green_heart/view/Login/LoginView.dart';
 import 'package:http/http.dart' as http;
+import "package:health/health.dart";
+
+enum AppState {
+  DATA_NOT_FETCHED,
+  FETCHING_DATA,
+  DATA_READY,
+  NO_DATA,
+  AUTH_NOT_GRANTED
+}
 
 class RecipeFeedController extends GetxController {
   Future<Recipe> _futureRecipe;
@@ -12,6 +21,9 @@ class RecipeFeedController extends GetxController {
   Future<Recipe> get futureRecipe => this._futureRecipe;
 
   RxInt test = 0.obs;
+
+  List<HealthDataPoint> _healthDataList = [];
+  AppState _state = AppState.DATA_NOT_FETCHED;
 
   @override
   void onInit() {
@@ -22,6 +34,7 @@ class RecipeFeedController extends GetxController {
     });
 
     _futureRecipe = fetchRecipe();
+    fetchData();
     super.onInit();
   }
 
@@ -44,5 +57,35 @@ class RecipeFeedController extends GetxController {
       // then throw an exception.
       throw Exception('Failed to load Recipe' + response.reasonPhrase);
     }
+  }
+
+  Future<void> fetchData() async {
+    print("CA COMMENCE");
+
+    HealthFactory health = HealthFactory();
+
+    List<HealthDataType> types = [
+      HealthDataType.WEIGHT,
+      HealthDataType.HEIGHT,
+      HealthDataType.STEPS,
+    ];
+
+    DateTime startDate = DateTime(2021, 5, 11, 0, 0, 0);
+    DateTime endDate = DateTime(2021, 5, 11, 23, 59, 59);
+
+    List<HealthDataPoint> healthDataList = List<HealthDataPoint>();
+
+    Future.delayed(Duration(seconds: 2), () async {
+      bool isAuthorized = await health.requestAuthorization(types);
+      if (isAuthorized) {
+        print("AUTORISER");
+      }
+      print("aprezs");
+
+      /// Do something with the health data list
+      for (var healthData in healthDataList) {
+        print(healthData);
+      }
+    });
   }
 }
