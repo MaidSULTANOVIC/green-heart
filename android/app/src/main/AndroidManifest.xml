@@ -2,6 +2,9 @@
     package="com.example.green_heart">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.BODY_SENSORS"/>
    <application
         android:label="green_heart"
         android:icon="@mipmap/ic_launcher">

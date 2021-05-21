@@ -5,9 +5,9 @@ class Recipe {
 
   Recipe({@required this.docs});
 
-  factory Recipe.fromJson(List<dynamic> json) {
+  factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
-      docs: json,
+      docs: json['results'],
     );
   }
 }

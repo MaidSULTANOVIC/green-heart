@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:green_heart/view/ActivityView.dart';
 import 'package:green_heart/view/HistoryView.dart';
 import 'package:green_heart/view/ProfileView.dart';
-import 'package:green_heart/view/RecipeFeedView.dart';
+import 'package:green_heart/view/RecipeFeed/RecipeFeedView.dart';
 import 'package:green_heart/view/SettingsView.dart';
 
 class HomePageView extends StatefulWidget {
@@ -22,6 +23,12 @@ class _HomePageViewState extends State<HomePageView> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    FlutterStatusbarcolor.setStatusBarColor(Color(0xFF36DC55));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _currentIndex == 0
@@ -35,6 +42,7 @@ class _HomePageViewState extends State<HomePageView> {
       backgroundColor: Colors.white,
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 20.0,
         fixedColor: Color(0xFF36DC55),
         type: BottomNavigationBarType.fixed,
         onTap: (value) {
