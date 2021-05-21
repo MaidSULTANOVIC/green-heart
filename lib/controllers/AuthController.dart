@@ -37,7 +37,7 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  Future<UserCredential> signInWithGoogle2() async {
+  Future<void> signInWithGoogle2() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
@@ -53,6 +53,8 @@ class AuthenticationController extends GetxController {
 
     print("ouiici");
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    FirebaseAuth.instance
+        .signInWithCredential(credential)
+        .then((value) => Get.off(() => HomePageView()));
   }
 }

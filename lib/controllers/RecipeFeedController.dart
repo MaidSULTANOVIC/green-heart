@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitness/fitness.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/models/Recipe.dart';
 import 'package:green_heart/view/Login/LoginView.dart';
@@ -34,7 +35,7 @@ class RecipeFeedController extends GetxController {
     });
 
     _futureRecipe = fetchRecipe();
-    fetchData();
+
     super.onInit();
   }
 
@@ -60,6 +61,8 @@ class RecipeFeedController extends GetxController {
   }
 
   Future<void> fetchData() async {
+    // await Fitness.hasPermission().then((value) => print(value));
+
     print("CA COMMENCE");
 
     HealthFactory health = HealthFactory();
@@ -75,17 +78,8 @@ class RecipeFeedController extends GetxController {
 
     List<HealthDataPoint> healthDataList = List<HealthDataPoint>();
 
-    Future.delayed(Duration(seconds: 2), () async {
-      bool isAuthorized = await health.requestAuthorization(types);
-      if (isAuthorized) {
-        print("AUTORISER");
-      }
-      print("aprezs");
-
-      /// Do something with the health data list
-      for (var healthData in healthDataList) {
-        print(healthData);
-      }
-    });
+    await health
+        .requestAuthorization(types)
+        .then((value) => print(value.toString()));
   }
 }
