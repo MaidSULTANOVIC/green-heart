@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "648472917598-2sfp7b9sjk3aludn3fv7f0qh2fsnveau.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sprm.green_heart",
+            "certificate_hash": "ef1c36fc98b7fcf09df7f240d60a84151232f810"
+          }
+        },
+        {
           "client_id": "648472917598-ui5q64o3rqd9502pvcfnaekmder3b67j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
