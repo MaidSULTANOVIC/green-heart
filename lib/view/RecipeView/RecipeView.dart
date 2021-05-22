@@ -33,6 +33,7 @@ class _RecipeViewState extends State<RecipeView> {
       child: Column(
         children: [
           Text("Ingredients"),
+          Text(widget.mealId.toString()),
           SizedBox(height: 15.0),
           Container(
             height: 120.0,

@@ -23,7 +23,11 @@ class RecipeFeedController extends GetxController {
 
   RxInt test = 0.obs;
 
+  double height = -1;
+  double weight = -1;
+
   List<HealthDataPoint> _healthDataList = [];
+  List<HealthDataPoint> _healthProfileList = [];
   AppState _state = AppState.DATA_NOT_FETCHED;
 
   @override
@@ -34,10 +38,6 @@ class RecipeFeedController extends GetxController {
       } else {}
     });
     fetchHealthData();
-
-    // Delete this line when implemented in fetchHealthData
-    _futureRecipe = fetchRecipe();
-
     super.onInit();
   }
 
@@ -45,11 +45,11 @@ class RecipeFeedController extends GetxController {
     FirebaseAuth.instance.signOut();
   }
 
-  Future<Recipe> fetchRecipe() async {
+  Future<Recipe> fetchRecipe(int minCalories, int maxCalories) async {
     // TODO : Change min and max calories in relation with the calculated calories available for the user -> In variable
 
-    int minCalories = 350;
-    int maxCalories = 500;
+    // int minCalories = 350;
+    // int maxCalories = 500;
 
     final response = await http.get(
       Uri.parse(
@@ -78,12 +78,20 @@ class RecipeFeedController extends GetxController {
       HealthDataType.ACTIVE_ENERGY_BURNED,
     ];
 
+    List<HealthDataType> typesProfile = [
+      HealthDataType.WEIGHT,
+      HealthDataType.HEIGHT,
+    ];
+
     //Take the last data from 1 day
     //TODO CHange the duration, take from the morning until now or something else /!\ To discuss with group
-    DateTime startDate = DateTime.now().subtract(Duration(days: 1));
+
+    //TODO : ask user if he is awake and take this date to start retrieving data (calories)
+    DateTime startDate = DateTime(2021, 5, 22, 7, 0, 0);
     DateTime endDate = DateTime.now();
 
     List<HealthDataPoint> healthDataList = List<HealthDataPoint>();
+    List<HealthDataPoint> healthProfileList = List<HealthDataPoint>();
 
     // Check if we have authorization to retrieve data from Google Fit or Apple Health if no, we ask them
     await health.requestAuthorization(types).then((isAuthorized) async {
@@ -95,6 +103,14 @@ class RecipeFeedController extends GetxController {
 
           /// Save all the new data points
           _healthDataList.addAll(healthData);
+
+          //-----------------------------------------------------------------------------------------
+
+          List<HealthDataPoint> healthProfile =
+              await health.getHealthDataFromTypes(
+                  DateTime(2018, 5, 22, 7, 0, 0), endDate, typesProfile);
+
+          _healthProfileList.addAll(healthProfile);
         } catch (e) {
           print("Caught exception in getHealthDataFromTypes: $e");
         }
@@ -102,28 +118,47 @@ class RecipeFeedController extends GetxController {
 
         /// Filter out duplicates
         _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
+        _healthProfileList = HealthFactory.removeDuplicates(_healthProfileList);
 
         /// Print the results
         _healthDataList.forEach((x) {
           print(
               "Data type: ${x.typeString} value : ${x.value}  ||  Unit string : ${x.unitString} || From ${x.dateFrom} to ${x.dateTo}");
+
           if (x.type == HealthDataType.ACTIVE_ENERGY_BURNED) {
             activeEnergy += x.value;
           }
         });
 
+        _healthProfileList.forEach((x) {
+          if (x.type == HealthDataType.HEIGHT) {
+            height = x.value;
+          } else if (x.type == HealthDataType.WEIGHT) {
+            weight = x.value;
+          }
+        });
+
         print("Calories burned: $activeEnergy");
+        print("Height : $height");
+        print("Weight : $weight");
 
         // TODO : Call the function to fetch recipes API but before that calculate the calories allowed to it for this recipe
-
+        double caloriesAllowed = calculateCalories(activeEnergy);
+        print(caloriesAllowed.round());
+        _futureRecipe = fetchRecipe(
+            (caloriesAllowed - 250.0).round(), caloriesAllowed.round());
       } else {
         print("NOT AUTHORIZED");
       }
     });
   }
 
-  double calculateCalories() {
+  double calculateCalories(double caloriesBurned) {
     // TODO Implements calculations with formula + data retrieved + with user choice (lose weight a lot or not or just maintain weight)
-    return 0.0;
+    double mb = 13.707 * weight + 492.3 * height - 6.673 * 25 + 667.051;
+    mb -= 500;
+    mb -= caloriesBurned;
+
+    return mb;
   }
 }
