@@ -27,11 +27,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^1.2.0
   firebase_core: ^1.2.0
-  fitness: ^1.0.1
   flutter_statusbarcolor_ns: ^0.3.0-nullsafety
   get: ^4.1.4
   google_sign_in: ^5.0.3
-  health: ^3.0.5
+  health: 3.0.4
   http: ^0.13.1
 
 dev_dependencies:

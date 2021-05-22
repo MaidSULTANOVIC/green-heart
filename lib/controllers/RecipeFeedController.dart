@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitness/fitness.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/models/Recipe.dart';
 import 'package:green_heart/view/Login/LoginView.dart';
@@ -33,7 +33,9 @@ class RecipeFeedController extends GetxController {
         Get.off(() => LoginView());
       } else {}
     });
+    fetchHealthData();
 
+    // Delete this line when implemented in fetchHealthData
     _futureRecipe = fetchRecipe();
 
     super.onInit();
@@ -44,6 +46,7 @@ class RecipeFeedController extends GetxController {
   }
 
   Future<Recipe> fetchRecipe() async {
+    // TODO : Change min and max calories in relation with the calculated calories available for the user -> In variable
     final response = await http.get(
       Uri.parse(
           'https://api.spoonacular.com/recipes/complexSearch?apiKey=ed014e6f54164d6bbc778828ad05114c&diet=vegetarian&minCalories=350&maxCalories=500&number=4'),
@@ -60,26 +63,63 @@ class RecipeFeedController extends GetxController {
     }
   }
 
-  Future<void> fetchData() async {
-    // await Fitness.hasPermission().then((value) => print(value));
-
-    print("CA COMMENCE");
+  Future<void> fetchHealthData() async {
+    // TODO If we have time : add waiting animtion with something like "We are calculating the best meals for you" with nice icon
 
     HealthFactory health = HealthFactory();
 
+    // The type of data that we wants to retrieve from Google Fit / Apple Health
+    // ! The active energy burned retrieve calories also when we are "afk" and not doing sports
     List<HealthDataType> types = [
-      HealthDataType.WEIGHT,
-      HealthDataType.HEIGHT,
-      HealthDataType.STEPS,
+      HealthDataType.ACTIVE_ENERGY_BURNED,
     ];
 
-    DateTime startDate = DateTime(2021, 5, 11, 0, 0, 0);
-    DateTime endDate = DateTime(2021, 5, 11, 23, 59, 59);
+    //Take the last data from 1 day
+    //TODO CHange the duration, take from the morning until now or something else /!\ To discuss with group
+    DateTime startDate = DateTime.now().subtract(Duration(days: 1));
+    DateTime endDate = DateTime.now();
 
     List<HealthDataPoint> healthDataList = List<HealthDataPoint>();
 
-    await health
-        .requestAuthorization(types)
-        .then((value) => print(value.toString()));
+    // Check if we have authorization to retrieve data from Google Fit or Apple Health if no, we ask them
+    await health.requestAuthorization(types).then((isAuthorized) async {
+      if (isAuthorized) {
+        try {
+          /// Fetch new data
+          List<HealthDataPoint> healthData =
+              await health.getHealthDataFromTypes(startDate, endDate, types);
+
+          /// Save all the new data points
+          _healthDataList.addAll(healthData);
+        } catch (e) {
+          print("Caught exception in getHealthDataFromTypes: $e");
+        }
+        double activeEnergy = 0.0;
+
+        /// Filter out duplicates
+        _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
+
+        /// Print the results
+        _healthDataList.forEach((x) {
+          print(
+              "Data type: ${x.typeString} value : ${x.value}  ||  Unit string : ${x.unitString} || From ${x.dateFrom} to ${x.dateTo}");
+          if (x.type == HealthDataType.ACTIVE_ENERGY_BURNED) {
+            activeEnergy += x.value;
+          }
+        });
+
+        print("Calories burned: $activeEnergy");
+
+        // TODO : Call the function to fetch recipes API but before that calculate the calories allowed to it for this recipe
+
+      } else {
+        print("NOT AUTHORIZED");
+      }
+    });
+  }
+
+  double calculateCalories() {
+    // TODO Implements calculations with formula + data retrieved + with user choice (lose weight a lot or not or just maintain weight)
+    return 0.0;
   }
 }
