@@ -40,8 +40,8 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
               ),
               FlatButton(
                   onPressed: () {
-                    c.fetchHealthData();
-                    //c.disconnect();
+                    //c.fetchHealthData();
+                    c.disconnect();
                   },
                   child: Icon(Icons.dangerous)),
               Padding(

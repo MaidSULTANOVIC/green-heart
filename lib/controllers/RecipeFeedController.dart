@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/models/Recipe.dart';
 import 'package:green_heart/view/Login/LoginView.dart';
@@ -30,6 +32,15 @@ class RecipeFeedController extends GetxController {
   List<HealthDataPoint> _healthProfileList = [];
   AppState _state = AppState.DATA_NOT_FETCHED;
 
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  int age = -1;
+  String gender = "";
+  int awakeTimeHour = -1;
+  int awakeTimeMinute = -1;
+  int mealFrequency = -1;
+
   @override
   void onInit() {
     FirebaseAuth.instance.authStateChanges().listen((User user) async {
@@ -37,12 +48,35 @@ class RecipeFeedController extends GetxController {
         Get.off(() => LoginView());
       } else {}
     });
-    fetchHealthData();
+
+    getUserData();
     super.onInit();
   }
 
   void disconnect() {
     FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> getUserData() {
+    //We retrieve and store all user data
+
+    firestore
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((value) {
+      Iterable<MapEntry<String, dynamic>> values = value.data().entries;
+
+      age = values.firstWhere((element) => element.key == "age").value;
+      gender = values.firstWhere((element) => element.key == "gender").value;
+      awakeTimeHour =
+          values.firstWhere((element) => element.key == "awakeTimeHour").value;
+      awakeTimeMinute = values
+          .firstWhere((element) => element.key == "awakeTimeMinute")
+          .value;
+      mealFrequency =
+          values.firstWhere((element) => element.key == "mealFrequency").value;
+    }).then((value) => fetchHealthData());
   }
 
   Future<Recipe> fetchRecipe(int minCalories, int maxCalories) async {
@@ -87,7 +121,8 @@ class RecipeFeedController extends GetxController {
     //TODO CHange the duration, take from the morning until now or something else /!\ To discuss with group
 
     //TODO : ask user if he is awake and take this date to start retrieving data (calories)
-    DateTime startDate = DateTime(2021, 5, 22, 7, 0, 0);
+    DateTime startDate = DateTime(2021, DateTime.now().month,
+        DateTime.now().day, awakeTimeHour, awakeTimeMinute, 0);
     DateTime endDate = DateTime.now();
 
     List<HealthDataPoint> healthDataList = List<HealthDataPoint>();
@@ -155,10 +190,13 @@ class RecipeFeedController extends GetxController {
 
   double calculateCalories(double caloriesBurned) {
     // TODO Implements calculations with formula + data retrieved + with user choice (lose weight a lot or not or just maintain weight)
-    double mb = 13.707 * weight + 492.3 * height - 6.673 * 25 + 667.051;
+    double mb = 13.707 * weight +
+        492.3 * height -
+        6.673 * age +
+        (gender == "male" ? 667.051 : 77.607);
     mb -= 500;
     mb -= caloriesBurned;
 
-    return mb;
+    return mb / mealFrequency;
   }
 }
