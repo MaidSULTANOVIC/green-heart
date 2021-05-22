@@ -47,9 +47,13 @@ class RecipeFeedController extends GetxController {
 
   Future<Recipe> fetchRecipe() async {
     // TODO : Change min and max calories in relation with the calculated calories available for the user -> In variable
+
+    int minCalories = 350;
+    int maxCalories = 500;
+
     final response = await http.get(
       Uri.parse(
-          'https://api.spoonacular.com/recipes/complexSearch?apiKey=ed014e6f54164d6bbc778828ad05114c&diet=vegetarian&minCalories=350&maxCalories=500&number=4'),
+          'https://api.spoonacular.com/recipes/complexSearch?apiKey=ed014e6f54164d6bbc778828ad05114c&diet=vegetarian&minCalories=$minCalories&maxCalories=$maxCalories&number=4'),
     );
 
     if (response.statusCode == 200) {
