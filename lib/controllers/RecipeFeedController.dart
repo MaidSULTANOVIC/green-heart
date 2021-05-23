@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/models/Recipe.dart';
 import 'package:green_heart/view/Login/LoginView.dart';
+import 'package:green_heart/view/RecipeFeed/RecipeFeedView.dart';
 import 'package:http/http.dart' as http;
 import "package:health/health.dart";
 
@@ -40,6 +41,8 @@ class RecipeFeedController extends GetxController {
   int awakeTimeHour = -1;
   int awakeTimeMinute = -1;
   int mealFrequency = -1;
+
+  Duration differenceTime;
 
   @override
   void onInit() {
@@ -76,7 +79,9 @@ class RecipeFeedController extends GetxController {
           .value;
       mealFrequency =
           values.firstWhere((element) => element.key == "mealFrequency").value;
-    }).then((value) => fetchHealthData());
+    }).then((value) {
+      fetchHealthData();
+    });
   }
 
   Future<Recipe> fetchRecipe(int minCalories, int maxCalories) async {
@@ -117,13 +122,13 @@ class RecipeFeedController extends GetxController {
       HealthDataType.HEIGHT,
     ];
 
-    //Take the last data from 1 day
     //TODO CHange the duration, take from the morning until now or something else /!\ To discuss with group
 
     //TODO : ask user if he is awake and take this date to start retrieving data (calories)
     DateTime startDate = DateTime(2021, DateTime.now().month,
         DateTime.now().day, awakeTimeHour, awakeTimeMinute, 0);
     DateTime endDate = DateTime.now();
+    differenceTime = endDate.difference(startDate);
 
     List<HealthDataPoint> healthDataList = List<HealthDataPoint>();
     List<HealthDataPoint> healthProfileList = List<HealthDataPoint>();
@@ -181,7 +186,8 @@ class RecipeFeedController extends GetxController {
         double caloriesAllowed = calculateCalories(activeEnergy);
         print(caloriesAllowed.round());
         _futureRecipe = fetchRecipe(
-            (caloriesAllowed - 250.0).round(), caloriesAllowed.round());
+                (caloriesAllowed - 100.0).round(), caloriesAllowed.round())
+            .whenComplete(() => Get.forceAppUpdate());
       } else {
         print("NOT AUTHORIZED");
       }
@@ -195,7 +201,12 @@ class RecipeFeedController extends GetxController {
         6.673 * age +
         (gender == "male" ? 667.051 : 77.607);
     mb -= 500;
-    mb -= caloriesBurned;
+
+    int interval = (differenceTime.inMinutes / 30).round();
+    interval *= 31;
+
+    //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
+    mb += (caloriesBurned - interval);
 
     return mb / mealFrequency;
   }

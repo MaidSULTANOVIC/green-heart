@@ -68,7 +68,6 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
                   } else if (snapshot.hasError) {
                     return SafeArea(child: Text("${snapshot.error}"));
                   }
-
                   // By default, show a loading spinner.
                   return CircularProgressIndicator();
                 },
