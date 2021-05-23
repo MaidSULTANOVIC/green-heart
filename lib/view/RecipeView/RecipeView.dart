@@ -42,6 +42,14 @@ class _RecipeViewState extends State<RecipeView> {
             ),
             onPressed: () => Get.back(),
           ),
+          actions: [
+            IconButton(
+                icon: Icon(
+                  Icons.favorite_border,
+                  color: Colors.black,
+                ),
+                onPressed: () => c.printInfo()),
+          ],
         ),
         body: SafeArea(
             child: SingleChildScrollView(
