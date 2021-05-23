@@ -207,6 +207,7 @@ class RecipeFeedController extends GetxController {
 
     //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
     mb += (caloriesBurned - interval);
+    print(caloriesBurned - interval);
 
     return mb / mealFrequency;
   }
