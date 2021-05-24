@@ -85,7 +85,7 @@ class AuthenticationController extends GetxController {
           'awakeTimeMinute': 30,
           'mealFrequency': 3,
           'gender': "male",
-        });
+        }, SetOptions(merge: true));
       } //Then, redirect the user to Home Page
     }).then((value) => Get.off(() => HomePageView()));
   }

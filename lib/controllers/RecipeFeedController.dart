@@ -128,7 +128,7 @@ class RecipeFeedController extends GetxController {
     //TODO CHange the duration, take from the morning until now or something else /!\ To discuss with group
 
     //TODO : ask user if he is awake and take this date to start retrieving data (calories)
-    DateTime startDate = DateTime(2021, DateTime.now().month,
+    DateTime startDate = DateTime(DateTime.now().year, DateTime.now().month,
         DateTime.now().day, awakeTimeHour, awakeTimeMinute, 0);
     DateTime endDate = DateTime.now();
     differenceTime = endDate.difference(startDate);
@@ -186,18 +186,19 @@ class RecipeFeedController extends GetxController {
         print("Weight : $weight");
 
         // TODO : Call the function to fetch recipes API but before that calculate the calories allowed to it for this recipe
-        double caloriesAllowed = calculateCalories(activeEnergy);
-        print(caloriesAllowed.round());
-        _futureRecipe = fetchRecipe(
-                (caloriesAllowed - 100.0).round(), caloriesAllowed.round())
-            .whenComplete(() => Get.forceAppUpdate());
+
+        calculateCalories(activeEnergy).then((value) {
+          print("allowed " + value.round().toString());
+          _futureRecipe = fetchRecipe((value - 100.0).round(), value.round())
+              .whenComplete(() => Get.forceAppUpdate());
+        });
       } else {
         print("NOT AUTHORIZED");
       }
     });
   }
 
-  double calculateCalories(double caloriesBurned) {
+  Future<double> calculateCalories(double caloriesBurned) async {
     // TODO Implements calculations with formula + data retrieved + with user choice (lose weight a lot or not or just maintain weight)
     double mb = 13.707 * weight +
         492.3 * height -
@@ -207,11 +208,38 @@ class RecipeFeedController extends GetxController {
 
     int interval = (differenceTime.inMinutes / 30).round();
     interval *= 31;
+    double result = 0;
+    double finalResult;
 
-    //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
-    mb += (caloriesBurned - interval);
-    print(caloriesBurned - interval);
+    await firestore
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("eatHistory")
+        .where("date",
+            isGreaterThanOrEqualTo: DateTime(
+                DateTime.now().year,
+                DateTime.now().month,
+                DateTime.now().day,
+                awakeTimeHour,
+                awakeTimeMinute,
+                0))
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        result += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "meal")
+            .value['nutrition']['nutrients'][0]['amount'];
+      });
+      print("already eaten calories" + result.toString());
+      //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
+      mb += (caloriesBurned - interval);
+      print(caloriesBurned - interval);
 
-    return mb / mealFrequency;
+      finalResult = mb / mealFrequency;
+    });
+
+    return finalResult;
   }
 }

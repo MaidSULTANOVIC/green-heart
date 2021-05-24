@@ -29,6 +29,7 @@ dependencies:
   firebase_auth: ^1.2.0
   firebase_core: ^1.2.0
   flutter_statusbarcolor_ns: ^0.3.0-nullsafety
+  fluttertoast: ^8.0.7
   get: ^4.1.4
   google_sign_in: ^5.0.3
   health: 3.0.4

@@ -72,13 +72,13 @@ class _RecipeViewState extends State<RecipeView> {
                 ),
                 OutlinedButton(
                     style: ButtonStyle(
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0))),
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFF36DC55))),
-                    onPressed: () => print("oui"),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0))),
+                      foregroundColor: MaterialStateProperty.all(Colors.white),
+                      backgroundColor:
+                          MaterialStateProperty.all(Color(0xFF36DC55)),
+                    ),
+                    onPressed: () => c.eatMeal(widget.meal),
                     child: Text("Eat this meal")),
                 SizedBox(height: 5.0),
                 Padding(

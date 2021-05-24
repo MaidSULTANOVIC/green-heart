@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/models/Ingredients.dart';
 import 'package:green_heart/models/Instructions.dart';
@@ -19,10 +20,15 @@ class RecipeController extends GetxController {
   Future<Instructions> get futureInstructions => this._futureInstructions;
   RxBool get isFavorite => this._isFavorite;
 
-  CollectionReference table = FirebaseFirestore.instance
+  CollectionReference tableFavorite = FirebaseFirestore.instance
       .collection("all_users")
       .doc(FirebaseAuth.instance.currentUser.uid)
       .collection("likedRecipes");
+
+  CollectionReference tableEat = FirebaseFirestore.instance
+      .collection("all_users")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .collection("eatHistory");
 
   @override
   void onInit() {
@@ -75,7 +81,7 @@ class RecipeController extends GetxController {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     // we check for the document with the same id field as the id of the meal, if it exists, it means that it's in the favorite list
-    table.where("id", isEqualTo: id).get().then((value) {
+    tableFavorite.where("id", isEqualTo: id).get().then((value) {
       if (!value.docs.isEmpty) {
         _isFavorite.value = true;
       } else {
@@ -85,11 +91,9 @@ class RecipeController extends GetxController {
   }
 
   void addFavorite(LinkedHashMap<String, dynamic> meal) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
     // If the meal is already in favorite, he will be deleted of the favorite list
     if (_isFavorite.value == true) {
-      table
+      tableFavorite
           .where("id", isEqualTo: meal.values.elementAt(0))
           .get()
           .then((value) {
@@ -100,15 +104,19 @@ class RecipeController extends GetxController {
       });
     } else {
       // Else, if the meal is not in favorite, he will be added
-      firestore
-          .collection("all_users")
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .collection("likedRecipes")
-          .doc()
-          .set({
+      tableFavorite.doc().set({
         'id': meal.values.elementAt(0),
         'meal': meal,
       }).then((value) => _isFavorite.value = true);
     }
+  }
+
+  void eatMeal(LinkedHashMap<String, dynamic> meal) {
+    //When the user click on "Eat this meal" button, it will add the current meal in its eaten meal history
+    tableEat.add({
+      'date': DateTime.now(),
+      'meal': meal,
+    }).then(
+        (value) => Fluttertoast.showToast(msg: "Meal added to your history"));
   }
 }
