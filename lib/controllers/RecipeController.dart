@@ -27,6 +27,7 @@ class RecipeController extends GetxController {
   @override
   void onInit() {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+    _isFavorite.value = false;
     super.onInit();
   }
 
@@ -75,7 +76,7 @@ class RecipeController extends GetxController {
 
     // we check for the document with the same id field as the id of the meal, if it exists, it means that it's in the favorite list
     table.where("id", isEqualTo: id).get().then((value) {
-      if (value != null) {
+      if (!value.docs.isEmpty) {
         _isFavorite.value = true;
       } else {
         _isFavorite.value = false;

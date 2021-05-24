@@ -55,9 +55,11 @@ class AuthenticationController extends GetxController {
 
     print("ouiici");
     // Once signed in, return the UserCredential
-    FirebaseAuth.instance
-        .signInWithCredential(credential)
-        .then((value) => checkUserFirebase());
+    FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+      checkUserFirebase();
+      googleUser.authHeaders
+          .then((value) => print("AUTH HEADER : " + value.values.first));
+    });
   }
 
 /**

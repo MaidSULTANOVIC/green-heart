@@ -70,7 +70,17 @@ class _RecipeViewState extends State<RecipeView> {
                     filterQuality: FilterQuality.high,
                   ),
                 ),
-                SizedBox(height: 25.0),
+                OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0))),
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0xFF36DC55))),
+                    onPressed: () => print("oui"),
+                    child: Text("Eat this meal")),
+                SizedBox(height: 5.0),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Align(

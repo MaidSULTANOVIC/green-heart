@@ -24,7 +24,8 @@ class RecipeFeedController extends GetxController {
 
   Future<Recipe> get futureRecipe => this._futureRecipe;
 
-  RxInt test = 0.obs;
+  RxString _username = "".obs;
+  String get username => this._username.value;
 
   double height = -1;
   double weight = -1;
@@ -61,8 +62,10 @@ class RecipeFeedController extends GetxController {
   }
 
   Future<void> getUserData() {
-    //We retrieve and store all user data
+    //Get username of the user
+    _username.value = FirebaseAuth.instance.currentUser.displayName;
 
+    //We retrieve and store all user data
     firestore
         .collection("all_users")
         .doc(FirebaseAuth.instance.currentUser.uid)
