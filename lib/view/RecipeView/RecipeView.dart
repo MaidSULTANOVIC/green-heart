@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/controllers/RecipeController.dart';
@@ -8,10 +10,9 @@ import 'package:green_heart/view/RecipeView/components/Ingredient.dart';
 import 'components/Instruction.dart';
 
 class RecipeView extends StatefulWidget {
-  RecipeView(this.meal, this.index);
+  RecipeView(this.meal);
 
-  final List<dynamic> meal;
-  final int index;
+  final LinkedHashMap<String, dynamic> meal;
 
   @override
   _RecipeViewState createState() => _RecipeViewState();
@@ -22,7 +23,7 @@ class _RecipeViewState extends State<RecipeView> {
 
   @override
   void initState() {
-    c.initFuture(widget.meal[widget.index]['id']);
+    c.initFuture(widget.meal.values.elementAt(0));
     super.initState();
   }
 
@@ -33,7 +34,7 @@ class _RecipeViewState extends State<RecipeView> {
           backgroundColor: Colors.white,
           elevation: 0.0,
           centerTitle: true,
-          title: Text(widget.meal[widget.index]['title'],
+          title: Text(widget.meal.values.elementAt(1),
               style: TextStyle(color: Colors.black)),
           leading: IconButton(
             icon: Icon(
@@ -44,11 +45,16 @@ class _RecipeViewState extends State<RecipeView> {
           ),
           actions: [
             IconButton(
-                icon: Icon(
-                  Icons.favorite_border,
-                  color: Colors.black,
+                icon: Obx(
+                  () => Icon(
+                    c.isFavorite.value == true
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color:
+                        c.isFavorite.value == true ? Colors.red : Colors.black,
+                  ),
                 ),
-                onPressed: () => c.printInfo()),
+                onPressed: () => c.addFavorite(widget.meal)),
           ],
         ),
         body: SafeArea(
@@ -60,7 +66,7 @@ class _RecipeViewState extends State<RecipeView> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
                   child: Image.network(
-                    widget.meal[widget.index]['image'],
+                    widget.meal.values.elementAt(2),
                     filterQuality: FilterQuality.high,
                   ),
                 ),
