@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitness/fitness.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/models/Recipe.dart';
 import 'package:green_heart/view/Login/LoginView.dart';
-import 'package:http/http.dart' as http;
 import "package:health/health.dart";
+import 'package:http/http.dart' as http;
 
 enum AppState {
   DATA_NOT_FETCHED,

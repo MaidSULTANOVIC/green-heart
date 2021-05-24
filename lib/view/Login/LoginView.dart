@@ -5,6 +5,7 @@ import 'package:green_heart/controllers/AuthController.dart';
 import 'package:green_heart/view/HomePage.dart';
 import 'package:green_heart/view/Register/RegisterView.dart';
 
+import '../../color.dart';
 import 'components/button.dart';
 import 'components/fields.dart';
 
@@ -35,7 +36,13 @@ class _LoginViewState extends State<LoginView> {
         backgroundColor: Color(0xFF36DC55),
         body: Center(
           child: Container(
-            color: Color(0xFF36DC55),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [lightGreen, lightCoral],
+                )
+            ),
             child: Padding(
               padding: const EdgeInsets.all(36.0),
               child: SingleChildScrollView(
