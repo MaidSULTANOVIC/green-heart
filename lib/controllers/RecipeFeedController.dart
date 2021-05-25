@@ -237,7 +237,8 @@ class RecipeFeedController extends GetxController {
       print("already eaten calories" + result.toString());
       //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
       mb += (caloriesBurned - interval);
-      print(caloriesBurned - interval);
+      double calorieGoal = mb;
+      saveCalorieGoal(calorieGoal);
 
       //The meals already eaten
       mb -= result;
@@ -248,4 +249,6 @@ class RecipeFeedController extends GetxController {
 
     return finalResult;
   }
+
+  void saveCalorieGoal(double calorie) {}
 }

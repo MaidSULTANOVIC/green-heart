@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -8,6 +9,6 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("ProfileView -"));
+    return Container(child: Text("ProfileView"));
   }
 }
