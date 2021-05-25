@@ -86,7 +86,7 @@ class _RecipeViewState extends State<RecipeView> {
                   child: Align(
                     child: Text("Ingredients",
                         style: TextStyle(
-                          color: Color(0xFF36DC55),
+                          color: Colors.green[600],
                           fontSize: 25.0,
                         )),
                     alignment: Alignment.centerLeft,
@@ -128,7 +128,7 @@ class _RecipeViewState extends State<RecipeView> {
                     alignment: Alignment.centerLeft,
                     child: Text("Instructions",
                         style: TextStyle(
-                          color: Color(0xFF36DC55),
+                          color: Colors.green[600],
                           fontSize: 25.0,
                         )),
                   ),
