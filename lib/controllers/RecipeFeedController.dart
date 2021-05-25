@@ -42,6 +42,7 @@ class RecipeFeedController extends GetxController {
   int awakeTimeHour = -1;
   int awakeTimeMinute = -1;
   int mealFrequency = -1;
+  int mealEaten = 0;
 
   Duration differenceTime;
 
@@ -231,13 +232,18 @@ class RecipeFeedController extends GetxController {
             .entries
             .firstWhere((element) => element.key == "meal")
             .value['nutrition']['nutrients'][0]['amount'];
+
+        mealEaten++;
       });
+      //TODO Add already eaten calories into account for the calculation of the calories allowed to eat
       print("already eaten calories" + result.toString());
       //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
       mb += (caloriesBurned - interval);
       print(caloriesBurned - interval);
+      mb -= result;
+      print("Meal eaten today : $mealEaten ");
 
-      finalResult = mb / mealFrequency;
+      finalResult = mb / (mealFrequency - mealEaten);
     });
 
     return finalResult;
