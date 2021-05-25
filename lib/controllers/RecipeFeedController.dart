@@ -53,8 +53,15 @@ class RecipeFeedController extends GetxController {
       } else {}
     });
 
-    getUserData();
     super.onInit();
+  }
+
+  void onInitChange() {
+    _healthDataList.clear();
+    _healthProfileList.clear();
+    mealEaten = 0;
+    mealFrequency = 0;
+    getUserData();
   }
 
   void disconnect() {
@@ -235,20 +242,27 @@ class RecipeFeedController extends GetxController {
       });
 
       print("already eaten calories" + result.toString());
+      print("mb 1 : $mb");
       //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
       mb += (caloriesBurned - interval);
       double calorieGoal = mb;
       saveCalorieGoal(calorieGoal);
-
+      print("mb 2 : $mb");
       //The meals already eaten
       mb -= result;
       print("Meal eaten today : $mealEaten ");
-
-      finalResult = mb / (mealFrequency - mealEaten);
+      print("mb 3 : $mb  et frequency $mealFrequency");
+      finalResult = mb /
+          ((mealFrequency - mealEaten) == 0 ? 1 : (mealFrequency - mealEaten));
     });
 
     return finalResult;
   }
 
-  void saveCalorieGoal(double calorie) {}
+  void saveCalorieGoal(double calorie) {
+    firestore
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .update({'dailyGoal': calorie});
+  }
 }

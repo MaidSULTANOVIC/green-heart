@@ -14,6 +14,12 @@ class _ActivityViewState extends State<ActivityView> {
   ActivityController c = Get.put(ActivityController());
 
   @override
+  void initState() {
+    c.initOnChange();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
         child: Column(

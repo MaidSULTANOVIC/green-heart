@@ -31,22 +31,29 @@ class CalorieGoal extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(15.0, 0, 25.0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text("0 kCal"), Text("2700 kCal")],
+                children: [
+                  Text("0 kCal"),
+                  Obx(() => Text("${c.calorieGoal.value} kCal"))
+                ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 15.0),
-              child: new LinearPercentIndicator(
-                width: MediaQuery.of(context).size.width - 70,
-                animation: true,
-                lineHeight: 20.0,
-                animationDuration: 2500,
-                percent: 0.8,
-                center: Text("80.0%"),
-                linearStrokeCap: LinearStrokeCap.roundAll,
-                progressColor: Colors.green,
-              ),
-            ),
+                padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 15.0),
+                child: Obx(
+                  () => new LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width - 70,
+                    animation: true,
+                    lineHeight: 20.0,
+                    animationDuration: 2500,
+                    percent: c.percentageCalorie.value > 1
+                        ? 1
+                        : c.percentageCalorie.value,
+                    center:
+                        Text("${(c.percentageCalorie.value * 100).round()}%"),
+                    linearStrokeCap: LinearStrokeCap.roundAll,
+                    progressColor: Colors.green,
+                  ),
+                )),
           ],
         ),
       ),
