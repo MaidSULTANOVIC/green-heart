@@ -1,10 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:green_heart/models/GoogleBirthday.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ProfileController extends GetxController {
 
+  Future<String> _futureGender;
+  Future<String> get futureGender => this._futureGender;
+
+  Future<GoogleBirthday> _futureBirthday;
+  Future<GoogleBirthday> get futureBirthday => this._futureBirthday;
 
   @override
   void onInit() {
@@ -20,34 +27,29 @@ class ProfileController extends GetxController {
     ],
   );
 
-  Future<String> _futureGender;
-  Future<String> get futureGender => this._futureGender;
-
-  Future<String> _futureBirthday;
-  Future<String> get futureBirthday => this._futureBirthday;
 
   Future<String> getGender() async {
     GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final headers = await googleUser.authHeaders;
-    final r = await http.get(Uri.parse(
-        "https://people.googleapis.com/v1/people/me?personFields=genders&key="),
+    final response = await http.get(Uri.parse(
+        "https://people.googleapis.com/v1/people/me?personFields=genders"),
         headers: {
           "Authorization": headers["Authorization"]
         }
     );
-    final response = jsonDecode(r.body);
-    return response["genders"][0]["formattedValue"];
+    final finalResponse = jsonDecode(response.body);
+    return finalResponse["genders"][0]["formattedValue"];
   }
-  Future<String> getBirthday() async {
+  Future<GoogleBirthday> getBirthday() async {
     GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final headers = await googleUser.authHeaders;
-    final r = await http.get(Uri.parse(
-        "https://people.googleapis.com/v1/people/me?personFields=birthdays&key="),
+    final response = await http.get(Uri.parse(
+        "https://people.googleapis.com/v1/people/me?personFields=birthdays"),
         headers: {
           "Authorization": headers["Authorization"]
         }
     );
-    final response = jsonDecode(r.body);
-    return response["birthdays"][0]["formattedValue"];
+    GoogleBirthday googleBirthday = GoogleBirthday.fromJson(jsonDecode(response.body));
+    return googleBirthday;
   }
 }

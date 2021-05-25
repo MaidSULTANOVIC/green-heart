@@ -16,7 +16,7 @@ class _HomePageViewState extends State<HomePageView> {
   int _currentIndex = 0;
 
   List<Widget> _children = [
-    RecipeFeedView(),
+    //RecipeFeedView(),
     ActivityView(),
     ProfileView(),
     HistoryView(),
@@ -26,7 +26,7 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     super.initState();
-    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
+    FlutterStatusbarcolor.setStatusBarColor(russianGreen);
   }
 
   @override
@@ -36,7 +36,7 @@ class _HomePageViewState extends State<HomePageView> {
           ? null
           : AppBar(
               elevation: 10.0,
-              backgroundColor: lightGreen,
+              backgroundColor: russianGreen,
               automaticallyImplyLeading: false,
               centerTitle: true,
               title: Text("Test", style: TextStyle(color: Colors.black))),

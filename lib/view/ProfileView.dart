@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/color.dart';
 import 'package:green_heart/controllers/ProfileController.dart';
+import 'package:green_heart/models/GoogleBirthday.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -71,14 +72,18 @@ class _ProfileViewState extends State<ProfileView> {
                               snapshot.data
                           );
                         }),
-                    // FutureBuilder<String>(
-                    //     future: controller.futureBirthday,
-                    //     initialData: "Loading birthday ...",
-                    //     builder: (context, snapshot) {
-                    //       return new Text(
-                    //           snapshot.data
-                    //       );
-                    //     })
+                    FutureBuilder<GoogleBirthday>(
+                        future: controller.futureBirthday,
+                        initialData: null,
+                        builder: (context, snapshot) {
+                          final year = snapshot.data.year.toString();
+                          final month = snapshot.data.month.toString();
+                          final day = snapshot.data.day.toString();
+                          final date = year + "/" + month + "/" + day;
+                          return new Text(
+                              date
+                          );
+                        })
                   ],
                 ),
               ),
