@@ -25,7 +25,6 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     super.initState();
-    FlutterStatusbarcolor.setStatusBarColor(Color(0xFF36DC55));
   }
 
   @override

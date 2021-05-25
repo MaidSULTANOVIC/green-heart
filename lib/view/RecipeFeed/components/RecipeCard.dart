@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/controllers/RecipeFeedController.dart';
-import 'package:green_heart/view/RecipeView.dart';
+import 'package:green_heart/view/RecipeView/RecipeView.dart';
 
 Container recipeCard(List documents, int index) {
   RecipeFeedController c = Get.find();
@@ -22,7 +22,7 @@ Container recipeCard(List documents, int index) {
         color: Color(0xFF36DC55),
       ),
       child: InkWell(
-        onTap: () => Get.to(() => RecipeView()),
+        onTap: () => Get.to(() => new RecipeView(documents[index])),
         borderRadius: BorderRadius.circular(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

@@ -32,18 +32,14 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 15.0),
-                child: Text("Hi, Paul! ",
-                    style: TextStyle(
-                        color: Color(0xFF36DC55),
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.w600)),
+                child: Obx(
+                  () => Text("Hi, " + c.username + "!",
+                      style: TextStyle(
+                          color: Color(0xFF36DC55),
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.w600)),
+                ),
               ),
-              FlatButton(
-                  onPressed: () {
-                    c.fetchData();
-                    //c.disconnect();
-                  },
-                  child: Icon(Icons.dangerous)),
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, top: 16.0),
                 child: Text("Your recipes",
@@ -68,7 +64,6 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
                   } else if (snapshot.hasError) {
                     return SafeArea(child: Text("${snapshot.error}"));
                   }
-
                   // By default, show a loading spinner.
                   return CircularProgressIndicator();
                 },
