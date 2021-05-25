@@ -32,7 +32,6 @@ class RecipeFeedController extends GetxController {
 
   List<HealthDataPoint> _healthDataList = [];
   List<HealthDataPoint> _healthProfileList = [];
-  AppState _state = AppState.DATA_NOT_FETCHED;
 
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -89,11 +88,6 @@ class RecipeFeedController extends GetxController {
   }
 
   Future<Recipe> fetchRecipe(int minCalories, int maxCalories) async {
-    // TODO : Change min and max calories in relation with the calculated calories available for the user -> In variable
-
-    // int minCalories = 350;
-    // int maxCalories = 500;
-
     final response = await http.get(
       Uri.parse(
           'https://api.spoonacular.com/recipes/complexSearch?apiKey=ed014e6f54164d6bbc778828ad05114c&diet=vegetarian&minCalories=$minCalories&maxCalories=$maxCalories&number=4'),
@@ -115,8 +109,7 @@ class RecipeFeedController extends GetxController {
 
     HealthFactory health = HealthFactory();
 
-    // The type of data that we wants to retrieve from Google Fit / Apple Health
-    // ! The active energy burned retrieve calories also when we are "afk" and not doing sports
+    // The type of data that we wants to retrieve from Google Fit
     List<HealthDataType> types = [
       HealthDataType.ACTIVE_ENERGY_BURNED,
     ];
@@ -126,9 +119,9 @@ class RecipeFeedController extends GetxController {
       HealthDataType.HEIGHT,
     ];
 
-    //TODO CHange the duration, take from the morning until now or something else /!\ To discuss with group
-
     //TODO : ask user if he is awake and take this date to start retrieving data (calories)
+
+    // Take the period between the time the user wake up and the time now to retrieve all the data of the day
     DateTime startDate = DateTime(DateTime.now().year, DateTime.now().month,
         DateTime.now().day, awakeTimeHour, awakeTimeMinute, 0);
     DateTime endDate = DateTime.now();
@@ -174,6 +167,7 @@ class RecipeFeedController extends GetxController {
           }
         });
 
+        //If it's a height or weight, we save them
         _healthProfileList.forEach((x) {
           if (x.type == HealthDataType.HEIGHT) {
             height = x.value;
@@ -186,8 +180,7 @@ class RecipeFeedController extends GetxController {
         print("Height : $height");
         print("Weight : $weight");
 
-        // TODO : Call the function to fetch recipes API but before that calculate the calories allowed to it for this recipe
-
+        // Then, the calories allowed are calculated and when the function is over, we fetch data from API to receive all the meals
         calculateCalories(activeEnergy).then((value) {
           print("allowed " + value.round().toString());
           _futureRecipe = fetchRecipe((value - 100.0).round(), value.round())
@@ -200,18 +193,22 @@ class RecipeFeedController extends GetxController {
   }
 
   Future<double> calculateCalories(double caloriesBurned) async {
-    // TODO Implements calculations with formula + data retrieved + with user choice (lose weight a lot or not or just maintain weight)
+    // Formula
     double mb = 13.707 * weight +
         492.3 * height -
         6.673 * age +
         (gender == "male" ? 667.051 : 77.607);
+
+    // Minus 500 to lose weight
     mb -= 500;
 
+    // The normal calories burnt when the user is not in physical activity
     int interval = (differenceTime.inMinutes / 30).round();
     interval *= 31;
     double result = 0;
     double finalResult;
 
+    // we retrieve the meals that he already ate
     await firestore
         .collection("all_users")
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -226,6 +223,7 @@ class RecipeFeedController extends GetxController {
                 0))
         .get()
         .then((value) {
+      //For every meal that he already ate today, we store the calories number and increase the variable mealEaten
       value.docs.forEach((element) {
         result += element
             .data()
@@ -235,11 +233,13 @@ class RecipeFeedController extends GetxController {
 
         mealEaten++;
       });
-      //TODO Add already eaten calories into account for the calculation of the calories allowed to eat
+
       print("already eaten calories" + result.toString());
       //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
       mb += (caloriesBurned - interval);
       print(caloriesBurned - interval);
+
+      //The meals already eaten
       mb -= result;
       print("Meal eaten today : $mealEaten ");
 
