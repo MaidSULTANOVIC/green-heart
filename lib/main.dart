@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/view/Login/LoginView.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(mySystemTheme);
+    FlutterStatusbarcolor.setStatusBarColor(Color(0xFF36DC55));
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

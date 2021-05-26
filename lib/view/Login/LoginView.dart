@@ -52,29 +52,11 @@ class _LoginViewState extends State<LoginView> {
                   children: <Widget>[
                     SizedBox(height: 120.0, child: Icon(Icons.nat_rounded)),
                     SizedBox(height: 35.0),
-                    emailField(emailAuth, style),
-                    SizedBox(height: 25.0),
-                    passwordField(passwordAuth, style),
-                    SizedBox(
-                      height: 35.0,
-                    ),
-                    loginButton(style, context, emailAuth, passwordAuth),
                     FlatButton(
                         onPressed: () {
                           c.signInWithGoogle2();
                         },
                         child: Text("Google signin")),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    TextButton(
-                      child: Text("Register",
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        // If he clicks on Register button, he's redirected to the register View
-                        Get.to(() => RegisterView());
-                      },
-                    )
                   ],
                 ),
               ),

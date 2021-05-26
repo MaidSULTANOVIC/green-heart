@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:green_heart/view/HomePage.dart';
@@ -52,8 +55,38 @@ class AuthenticationController extends GetxController {
 
     print("ouiici");
     // Once signed in, return the UserCredential
-    FirebaseAuth.instance
-        .signInWithCredential(credential)
-        .then((value) => Get.off(() => HomePageView()));
+    FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+      checkUserFirebase();
+      googleUser.authHeaders
+          .then((value) => print("AUTH HEADER : " + value.values.first));
+    });
+  }
+
+/**
+ * If the user is a first time user, it will add a new document for him with his data, if he's already in the collection, nothing is done
+ */
+  void checkUserFirebase() {
+    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    //If the user doesn't exist in database, we create a new document for him with his user id and add default values
+    firestore
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((value) {
+      if (!value.exists) {
+        firestore
+            .collection("all_users")
+            .doc(FirebaseAuth.instance.currentUser.uid)
+            .set({
+          'age': 18,
+          'awakeTimeHour': 7,
+          'awakeTimeMinute': 30,
+          'mealFrequency': 3,
+          'gender': "male",
+        }, SetOptions(merge: true));
+      } //Then, redirect the user to Home Page
+    }).then((value) => Get.off(() => HomePageView()));
   }
 }
