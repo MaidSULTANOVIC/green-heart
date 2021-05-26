@@ -25,6 +25,18 @@ class _ActivityViewState extends State<ActivityView> {
         child: Column(
       children: [
         CalorieGoal(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Total CO2 saved:",
+                style: TextStyle(fontWeight: FontWeight.w500)),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text("1.04 metric tons of CO2",
+                style: TextStyle(color: Colors.green[400]))
+          ],
+        ),
       ],
     ));
   }
