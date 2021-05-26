@@ -64,30 +64,48 @@ class _ProfileViewState extends State<ProfileView> {
                           color: Colors.white
                       ),
                     ),
-                    FutureBuilder<String>(
-                        future: controller.futureGender,
-                        initialData: "Loading gender ...",
-                        builder: (context, snapshot) {
-                          return new Text(
-                              snapshot.data
-                          );
-                        }),
-                    FutureBuilder<GoogleBirthday>(
-                        future: controller.futureBirthday,
-                        initialData: null,
-                        builder: (context, snapshot) {
-                          final year = snapshot.data.year.toString();
-                          final month = snapshot.data.month.toString();
-                          final day = snapshot.data.day.toString();
-                          final date = year + "/" + month + "/" + day;
-                          return new Text(
-                              date
-                          );
-                        })
                   ],
                 ),
               ),
             ),
+          ),
+          Container(
+              child: Column(
+                children: [
+                  Text("Gender"),
+                  Row(
+                    children: [
+                      SizedBox(height: 120.0, child: Icon(Icons.person)),
+                      FutureBuilder<String>(
+                          future: controller.futureGender,
+                          initialData: "Loading gender ...",
+                          builder: (context, snapshot) {
+                            return new Text(
+                                snapshot.data
+                            );
+                          }),
+                    ],
+                  ),
+                  Text("Birthday"),
+                  Row(
+                    children: [
+                      SizedBox(height: 120.0, child: Icon(Icons.cake)),
+                      FutureBuilder<GoogleBirthday>(
+                          future: controller.futureBirthday,
+                          builder: (context, snapshot) {
+                            final year = snapshot.data.year.toString();
+                            final month = snapshot.data.month.toString();
+                            final day = snapshot.data.day.toString();
+                            final date = year + "/" + month + "/" + day;
+                            return new Text(
+                                date
+                            );
+                          })
+                    ],
+                  )
+                ],
+              )
+
           )
         ],
       ),
