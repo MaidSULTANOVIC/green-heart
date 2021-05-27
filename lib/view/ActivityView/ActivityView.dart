@@ -41,10 +41,61 @@ class _ActivityViewState extends State<ActivityView> {
                   style: TextStyle(color: Colors.green[400]))),
             ],
           ),
-          Container(
-            height: 100.0,
-            color: Colors.red,
-            child: Center(child: Text(" ACHIEVEMENTS HERE")),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(
+              "Achievements",
+              style: TextStyle(
+                  color: Colors.green[400],
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                    height: 100.0,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 80.0,
+                          child: Image(
+                              image: AssetImage(
+                                  'assets/gems/${c.co2Index.value}.png')),
+                        ),
+                        Text("CO2")
+                      ],
+                    )),
+                Container(
+                    height: 100.0,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 80.0,
+                          child: Image(
+                              image: AssetImage(
+                                  'assets/nature/${c.mealIndex.value}.png')),
+                        ),
+                        Text("Meal eaten")
+                      ],
+                    )),
+                Container(
+                    height: 100.0,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 80.0,
+                          child: Image(
+                              image: AssetImage(
+                                  'assets/gems/${c.goalIndex.value}.png')),
+                        ),
+                        Text("Daily Goal")
+                      ],
+                    )),
+              ],
+            ),
           ),
           SizedBox(
             height: 40.0,

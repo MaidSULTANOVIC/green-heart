@@ -14,6 +14,19 @@ class ActivityController extends GetxController {
   RxDouble _co2Saved = 0.0.obs;
   RxDouble get co2Saved => this._co2Saved;
 
+  RxString _goalIndex = "0".obs;
+  RxString get goalIndex => this._goalIndex;
+
+  RxString _mealIndex = "0".obs;
+  RxString get mealIndex => this._mealIndex;
+
+  RxString _co2Index = "0".obs;
+  RxString get co2Index => this._co2Index;
+
+  int _mealEaten;
+
+  int _goalAchieved;
+
   final listCalories = [].obs;
   final listGoal = [].obs;
 
@@ -60,9 +73,14 @@ class ActivityController extends GetxController {
           .value;
       _co2Saved.value =
           values.firstWhere((element) => element.key == "co2Saved").value;
+      _mealEaten =
+          values.firstWhere((element) => element.key == "mealEaten").value;
+      _goalAchieved =
+          values.firstWhere((element) => element.key == "goalAchieved").value;
 
       //Then we update ui
       updateProgressBar();
+      updateAchievements();
     });
   }
 
@@ -335,6 +353,60 @@ class ActivityController extends GetxController {
       _graphSelect.value = true;
     } else {
       _graphSelect.value = false;
+    }
+  }
+
+  void updateAchievements() {
+    findAssetsGoal();
+    findAssetsMeal();
+    findAssetsCo2();
+  }
+
+  void findAssetsGoal() {
+    if (_goalAchieved >= 500) {
+      _goalIndex.value = "5";
+    } else if (_goalAchieved >= 250) {
+      _goalIndex.value = "4";
+    } else if (_goalAchieved >= 100) {
+      _goalIndex.value = "3";
+    } else if (_goalAchieved >= 50) {
+      _goalIndex.value = "2";
+    } else if (_goalAchieved >= 10) {
+      _goalIndex.value = "1";
+    } else if (_goalAchieved >= 0) {
+      _goalIndex.value = "0";
+    }
+  }
+
+  void findAssetsMeal() {
+    if (_mealEaten >= 1000) {
+      _mealIndex.value = "5";
+    } else if (_mealEaten >= 500) {
+      _mealIndex.value = "4";
+    } else if (_mealEaten >= 100) {
+      _mealIndex.value = "3";
+    } else if (_mealEaten >= 50) {
+      _mealIndex.value = "2";
+    } else if (_mealEaten >= 10) {
+      _mealIndex.value = "1";
+    } else if (_mealEaten >= 0) {
+      _mealIndex.value = "0";
+    }
+  }
+
+  void findAssetsCo2() {
+    if (_co2Saved.value >= 1460) {
+      _co2Index.value = "5";
+    } else if (_co2Saved.value >= 730) {
+      _co2Index.value = "4";
+    } else if (_co2Saved.value >= 465) {
+      _co2Index.value = "3";
+    } else if (_co2Saved.value >= 100) {
+      _co2Index.value = "2";
+    } else if (_co2Saved.value >= 20) {
+      _co2Index.value = "1";
+    } else if (_co2Saved.value >= 0) {
+      _co2Index.value = "0";
     }
   }
 }
