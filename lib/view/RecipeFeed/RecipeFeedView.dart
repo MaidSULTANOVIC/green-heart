@@ -53,19 +53,24 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
               FutureBuilder<Recipe>(
                 future: c.futureRecipe,
                 builder: (context, snapshot) {
-                  if (snapshot.data.docs.isEmpty) {
-                    return Text(
-                        "You've reached your maximal amount of calories for today.");
-                  } else if (snapshot.hasData) {
+                  if (snapshot.hasData) {
                     final List<dynamic> documents = snapshot.data.docs;
-                    return ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: documents.length,
-                        itemBuilder: (context, index) {
-                          return recipeCard(documents, index);
-                        });
+                    if (documents.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                            "You've reached your maximal amount of calories for today."),
+                      );
+                    } else {
+                      return ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: documents.length,
+                          itemBuilder: (context, index) {
+                            return recipeCard(documents, index);
+                          });
+                    }
                   } else if (snapshot.hasError) {
                     return SafeArea(child: Text("${snapshot.error}"));
                   }
