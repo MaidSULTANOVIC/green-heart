@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 
 class ActivityController extends GetxController {
@@ -10,8 +11,17 @@ class ActivityController extends GetxController {
   RxDouble _percentageCalorie = 0.0.obs;
   RxDouble get percentageCalorie => this._percentageCalorie;
 
+  RxDouble _co2Saved = 0.0.obs;
+  RxDouble get co2Saved => this._co2Saved;
+
+  final listCalories = [].obs;
+  final listGoal = [].obs;
+
   int awakeTimeHour = 0;
   int awakeTimeMinute = 0;
+
+  RxBool _graphSelect = false.obs;
+  RxBool get graphSelect => this._graphSelect;
 
   @override
   void onInit() {
@@ -22,7 +32,11 @@ class ActivityController extends GetxController {
     _percentageCalorie.value = 0.0;
     _calorieEaten = 0.0;
     _calorieGoal.value = 0;
+    listCalories.value = [];
+    listGoal.value = [];
     getCalorieGoal();
+    updateCaloriesList();
+    updateGoalList();
   }
 
   void getCalorieGoal() {
@@ -44,6 +58,8 @@ class ActivityController extends GetxController {
       awakeTimeMinute = values
           .firstWhere((element) => element.key == "awakeTimeMinute")
           .value;
+      _co2Saved.value =
+          values.firstWhere((element) => element.key == "co2Saved").value;
 
       //Then we update ui
       updateProgressBar();
@@ -78,5 +94,247 @@ class ActivityController extends GetxController {
       //Then, the percentage of the progress bar is updated
       _percentageCalorie.value = _calorieEaten / _calorieGoal.value;
     });
+  }
+
+  Future<void> updateCaloriesList() async {
+    DateTime now = DateTime.now();
+
+    //Three month ago
+    await FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("eatHistory")
+        .where('date',
+            isGreaterThanOrEqualTo: DateTime(now.year, now.month - 3, 0))
+        .where('date', isLessThan: DateTime(now.year, now.month - 2, 0))
+        .get()
+        .then((value) {
+      double tempCal = 0.0;
+      double nb = 0.0;
+      value.docs.forEach((element) {
+        tempCal += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "meal")
+            .value['nutrition']['nutrients'][0]['amount'];
+        nb++;
+      });
+      print("THREE MONTH");
+      if (nb == 0.0) {
+        listCalories.add(new FlSpot(0, 0));
+      } else {
+        listCalories.add(new FlSpot(0, tempCal.roundToDouble() / nb));
+      }
+    });
+
+    //Two month ago
+    await FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("eatHistory")
+        .where('date',
+            isGreaterThanOrEqualTo: DateTime(now.year, now.month - 2, 0))
+        .where('date', isLessThan: DateTime(now.year, now.month - 1, 0))
+        .get()
+        .then((value) {
+      double tempCal = 0.0;
+      double nb = 0.0;
+      value.docs.forEach((element) {
+        tempCal += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "meal")
+            .value['nutrition']['nutrients'][0]['amount'];
+        nb++;
+      });
+
+      print("TWO MONTH");
+      if (nb == 0.0) {
+        listCalories.add(new FlSpot(4, 0));
+      } else {
+        listCalories.add(new FlSpot(4, tempCal.roundToDouble() / nb));
+      }
+    });
+
+    //One month ago
+    await FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("eatHistory")
+        .where('date',
+            isGreaterThanOrEqualTo: DateTime(now.year, now.month - 1, 0))
+        .where('date', isLessThan: DateTime(now.year, now.month, 0))
+        .get()
+        .then((value) {
+      double tempCal = 0.0;
+      double nb = 0.0;
+      value.docs.forEach((element) {
+        tempCal += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "meal")
+            .value['nutrition']['nutrients'][0]['amount'];
+        nb++;
+      });
+
+      print("ONE MONTH");
+      if (nb == 0.0) {
+        listCalories.add(new FlSpot(8, 0));
+      } else {
+        listCalories.add(new FlSpot(8, tempCal.roundToDouble() / nb));
+      }
+    });
+
+    //This month
+    await FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("eatHistory")
+        .where('date', isGreaterThanOrEqualTo: DateTime(now.year, now.month, 0))
+        .get()
+        .then((value) {
+      double tempCal = 0.0;
+      double nb = 0.0;
+      value.docs.forEach((element) {
+        tempCal += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "meal")
+            .value['nutrition']['nutrients'][0]['amount'];
+        nb = nb + 1;
+      });
+      print("THIS MONTH");
+
+      if (nb == 0.0) {
+        listCalories.add(new FlSpot(11, 0));
+      } else {
+        listCalories.add(new FlSpot(11, tempCal.roundToDouble() / nb));
+      }
+    });
+  }
+
+  Future<void> updateGoalList() async {
+    DateTime now = DateTime.now();
+
+    //Three month ago
+    await FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("dailyGoalHistory")
+        .where('date',
+            isGreaterThanOrEqualTo: DateTime(now.year, now.month - 3, 0))
+        .where('date', isLessThan: DateTime(now.year, now.month - 2, 0))
+        .get()
+        .then((value) {
+      double tempCal = 0.0;
+      double nb = 0.0;
+      value.docs.forEach((element) {
+        tempCal += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "dailyGoal")
+            .value;
+        nb++;
+      });
+      print("THREE MONTH");
+      if (nb == 0.0) {
+        listGoal.add(new FlSpot(0, 0));
+      } else {
+        listGoal.add(new FlSpot(0, tempCal.roundToDouble() / nb));
+      }
+    });
+
+    //Two month ago
+    await FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("dailyGoalHistory")
+        .where('date',
+            isGreaterThanOrEqualTo: DateTime(now.year, now.month - 2, 0))
+        .where('date', isLessThan: DateTime(now.year, now.month - 1, 0))
+        .get()
+        .then((value) {
+      double tempCal = 0.0;
+      double nb = 0.0;
+      value.docs.forEach((element) {
+        tempCal += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "dailyGoal")
+            .value;
+        nb++;
+      });
+
+      print("TWO MONTH");
+      if (nb == 0.0) {
+        listGoal.add(new FlSpot(4, 0));
+      } else {
+        listGoal.add(new FlSpot(4, tempCal.roundToDouble() / nb));
+      }
+    });
+
+    //One month ago
+    await FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("dailyGoalHistory")
+        .where('date',
+            isGreaterThanOrEqualTo: DateTime(now.year, now.month - 1, 0))
+        .where('date', isLessThan: DateTime(now.year, now.month, 0))
+        .get()
+        .then((value) {
+      double tempCal = 0.0;
+      double nb = 0.0;
+      value.docs.forEach((element) {
+        tempCal += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "dailyGoal")
+            .value;
+        nb++;
+      });
+
+      print("ONE MONTH");
+      if (nb == 0.0) {
+        listGoal.add(new FlSpot(8, 0));
+      } else {
+        listGoal.add(new FlSpot(8, tempCal.roundToDouble() / nb));
+      }
+    });
+
+    //This month
+    await FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("dailyGoalHistory")
+        .where('date', isGreaterThanOrEqualTo: DateTime(now.year, now.month, 0))
+        .get()
+        .then((value) {
+      double tempCal = 0.0;
+      double nb = 0.0;
+      value.docs.forEach((element) {
+        tempCal += element
+            .data()
+            .entries
+            .firstWhere((element) => element.key == "dailyGoal")
+            .value;
+        nb = nb + 1;
+      });
+      print("THIS MONTH");
+
+      if (nb == 0.0) {
+        listGoal.add(new FlSpot(11, 0));
+      } else {
+        listGoal.add(new FlSpot(11, tempCal.roundToDouble() / nb));
+      }
+    });
+  }
+
+  void switchGraph() {
+    if (_graphSelect.value == false) {
+      _graphSelect.value = true;
+    } else {
+      _graphSelect.value = false;
+    }
   }
 }

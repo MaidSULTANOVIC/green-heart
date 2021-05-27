@@ -42,6 +42,7 @@ class RecipeFeedController extends GetxController {
   int awakeTimeMinute = -1;
   int mealFrequency = -1;
   int mealEaten = 0;
+  bool exists = false;
 
   Duration differenceTime;
 
@@ -71,6 +72,20 @@ class RecipeFeedController extends GetxController {
   Future<void> getUserData() {
     //Get username of the user
     _username.value = FirebaseAuth.instance.currentUser.displayName;
+
+    firestore
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("dailyGoalHistory")
+        .where('date',
+            isEqualTo: DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day))
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        exists = true;
+      }
+    });
 
     //We retrieve and store all user data
     firestore
@@ -264,5 +279,36 @@ class RecipeFeedController extends GetxController {
         .collection("all_users")
         .doc(FirebaseAuth.instance.currentUser.uid)
         .update({'dailyGoal': calorie});
+
+    if (!exists) {
+      firestore
+          .collection("all_users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("dailyGoalHistory")
+          .add({
+        'date': DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
+        'dailyGoal': calorie,
+      });
+
+      firestore
+          .collection("all_users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .update({'co2Saved': FieldValue.increment(2.03)});
+    } else {
+      firestore
+          .collection("all_users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("dailyGoalHistory")
+          .where('date',
+              isEqualTo: DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day))
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          element.reference.update({'dailyGoal': calorie});
+        });
+      });
+    }
   }
 }
