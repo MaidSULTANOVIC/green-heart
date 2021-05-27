@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,6 +14,11 @@ class ProfileController extends GetxController {
 
   Future<GoogleBirthday> _futureBirthday;
   Future<GoogleBirthday> get futureBirthday => this._futureBirthday;
+
+  CollectionReference tableFavorite = FirebaseFirestore.instance
+      .collection("all_users")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .collection("likedRecipes");
 
   @override
   void onInit() {

@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/color.dart';
 import 'package:green_heart/controllers/ProfileController.dart';
 import 'package:green_heart/models/GoogleBirthday.dart';
+import 'RecipeFeed/components/RecipeCard.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -30,7 +32,7 @@ class _ProfileViewState extends State<ProfileView> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [lightGreen, lightCoral],
+                  colors: [celadon, blizzardBlue],
                 )
             ),
             child: Container(
@@ -70,42 +72,57 @@ class _ProfileViewState extends State<ProfileView> {
             ),
           ),
           Container(
-              child: Column(
-                children: [
-                  Text("Gender"),
-                  Row(
-                    children: [
-                      SizedBox(height: 120.0, child: Icon(Icons.person)),
-                      FutureBuilder<String>(
-                          future: controller.futureGender,
-                          initialData: "Loading gender ...",
-                          builder: (context, snapshot) {
-                            return new Text(
-                                snapshot.data
-                            );
-                          }),
-                    ],
-                  ),
-                  Text("Birthday"),
-                  Row(
-                    children: [
-                      SizedBox(height: 120.0, child: Icon(Icons.cake)),
-                      FutureBuilder<GoogleBirthday>(
-                          future: controller.futureBirthday,
-                          builder: (context, snapshot) {
-                            final year = snapshot.data.year.toString();
-                            final month = snapshot.data.month.toString();
-                            final day = snapshot.data.day.toString();
-                            final date = year + "/" + month + "/" + day;
-                            return new Text(
-                                date
-                            );
-                          })
-                    ],
-                  )
-                ],
-              )
-
+            child: Column(
+              children: [
+                SizedBox(height: 40.0),
+                Text("Gender"),
+                Row(
+                  children: [
+                    SizedBox(height: 40.0, child: Icon(Icons.person)),
+                    FutureBuilder<String>(
+                        future: controller.futureGender,
+                        initialData: "Loading gender ...",
+                        builder: (context, snapshot) {
+                          return new Text(
+                              snapshot.data
+                          );
+                        }),
+                  ],
+                ),
+                Text("Birthday"),
+                Row(
+                  children: [
+                    SizedBox(height: 40.0, child: Icon(Icons.cake)),
+                    FutureBuilder<GoogleBirthday>(
+                        future: controller.futureBirthday,
+                        builder: (context, snapshot) {
+                          final year = snapshot.data.year.toString();
+                          final month = snapshot.data.month.toString();
+                          final day = snapshot.data.day.toString();
+                          final date = year + "/" + month + "/" + day;
+                          return new Text(
+                              date
+                          );
+                        })
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            child: Column(
+              children: [
+                FutureBuilder<QuerySnapshot>(
+                  future:FirebaseFirestore.instance
+                      .collection('all_users')
+                      .doc(FirebaseAuth.instance.currentUser.uid)
+                      .collection('likedRecipes').get(),
+                  builder: (context, snapshot) {
+                    print(snapshot.data);
+                  },
+                )
+              ],
+            ),
           )
         ],
       ),

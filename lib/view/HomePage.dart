@@ -35,7 +35,7 @@ class _HomePageViewState extends State<HomePageView> {
           ? null
           : AppBar(
               elevation: 10.0,
-              backgroundColor: russianGreen,
+              backgroundColor: celadon,
               automaticallyImplyLeading: false,
               centerTitle: true,
               title: Text("Test", style: TextStyle(color: Colors.black))),
@@ -47,7 +47,7 @@ class _HomePageViewState extends State<HomePageView> {
         ),
         child: BottomNavigationBar(
           elevation: 50.0,
-          fixedColor: lightCoral,
+          fixedColor: blizzardBlue,
           type: BottomNavigationBarType.fixed,
           onTap: (value) {
             setState(() {
@@ -62,8 +62,10 @@ class _HomePageViewState extends State<HomePageView> {
                 icon: Icon(Icons.stacked_line_chart_rounded), label: "Activity"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.perm_identity), label: "Profile"),
-            BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings")
+            BottomNavigationBarItem(
+                icon: Icon(Icons.history), label: "History"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: "Settings")
           ],
         ),
       )

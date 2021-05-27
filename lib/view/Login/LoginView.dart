@@ -40,7 +40,7 @@ class _LoginViewState extends State<LoginView> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [lightGreen, lightCoral],
+                  colors: [celadon, blizzardBlue],
                 )
             ),
             child: Padding(
