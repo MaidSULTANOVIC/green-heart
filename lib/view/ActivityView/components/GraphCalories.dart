@@ -28,13 +28,13 @@ class GraphCalories extends StatelessWidget {
         horizontalInterval: 500.0,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            color: Colors.grey[400],
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            color: Colors.grey[300],
             strokeWidth: 1,
           );
         },
@@ -87,7 +87,7 @@ class GraphCalories extends StatelessWidget {
       ),
       borderData: FlBorderData(
           show: true,
-          border: Border.all(color: const Color(0xff37434d), width: 1)),
+          border: Border.all(color: const Color(0xff37434d), width: 2)),
       minX: 0,
       maxX: 11,
       minY: 0,

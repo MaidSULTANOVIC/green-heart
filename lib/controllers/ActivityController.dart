@@ -117,6 +117,9 @@ class ActivityController extends GetxController {
   Future<void> updateCaloriesList() async {
     DateTime now = DateTime.now();
 
+    // For each Month, we take every meal eaten within this month and we sum its calories, then, we make the average of the meals's calories
+    // And we add a new FlSpot in the array that will be shown on the graph/chart
+
     //Three month ago
     await FirebaseFirestore.instance
         .collection("all_users")
@@ -141,7 +144,8 @@ class ActivityController extends GetxController {
       if (nb == 0.0) {
         listCalories.add(new FlSpot(0, 0));
       } else {
-        listCalories.add(new FlSpot(0, tempCal.roundToDouble() / nb));
+        listCalories
+            .add(new FlSpot(0, (tempCal.roundToDouble() / nb).roundToDouble()));
       }
     });
 
@@ -170,7 +174,8 @@ class ActivityController extends GetxController {
       if (nb == 0.0) {
         listCalories.add(new FlSpot(4, 0));
       } else {
-        listCalories.add(new FlSpot(4, tempCal.roundToDouble() / nb));
+        listCalories
+            .add(new FlSpot(4, (tempCal.roundToDouble() / nb).roundToDouble()));
       }
     });
 
@@ -199,7 +204,8 @@ class ActivityController extends GetxController {
       if (nb == 0.0) {
         listCalories.add(new FlSpot(8, 0));
       } else {
-        listCalories.add(new FlSpot(8, tempCal.roundToDouble() / nb));
+        listCalories
+            .add(new FlSpot(8, (tempCal.roundToDouble() / nb).roundToDouble()));
       }
     });
 
@@ -226,13 +232,17 @@ class ActivityController extends GetxController {
       if (nb == 0.0) {
         listCalories.add(new FlSpot(11, 0));
       } else {
-        listCalories.add(new FlSpot(11, tempCal.roundToDouble() / nb));
+        listCalories.add(
+            new FlSpot(11, (tempCal.roundToDouble() / nb).roundToDouble()));
       }
     });
   }
 
   Future<void> updateGoalList() async {
     DateTime now = DateTime.now();
+
+    // For each Month, we take every meal goal within this month and we sum its calories, then, we make the average of the goals's calories
+    // And we add a new FlSpot in the array that will be shown on the graph/chart
 
     //Three month ago
     await FirebaseFirestore.instance
@@ -258,7 +268,8 @@ class ActivityController extends GetxController {
       if (nb == 0.0) {
         listGoal.add(new FlSpot(0, 0));
       } else {
-        listGoal.add(new FlSpot(0, tempCal.roundToDouble() / nb));
+        listGoal
+            .add(new FlSpot(0, (tempCal.roundToDouble() / nb).roundToDouble()));
       }
     });
 
@@ -287,7 +298,8 @@ class ActivityController extends GetxController {
       if (nb == 0.0) {
         listGoal.add(new FlSpot(4, 0));
       } else {
-        listGoal.add(new FlSpot(4, tempCal.roundToDouble() / nb));
+        listGoal
+            .add(new FlSpot(4, (tempCal.roundToDouble() / nb).roundToDouble()));
       }
     });
 
@@ -316,7 +328,8 @@ class ActivityController extends GetxController {
       if (nb == 0.0) {
         listGoal.add(new FlSpot(8, 0));
       } else {
-        listGoal.add(new FlSpot(8, tempCal.roundToDouble() / nb));
+        listGoal
+            .add(new FlSpot(8, (tempCal.roundToDouble() / nb).roundToDouble()));
       }
     });
 
@@ -343,11 +356,15 @@ class ActivityController extends GetxController {
       if (nb == 0.0) {
         listGoal.add(new FlSpot(11, 0));
       } else {
-        listGoal.add(new FlSpot(11, tempCal.roundToDouble() / nb));
+        listGoal.add(
+            new FlSpot(11, (tempCal.roundToDouble() / nb).roundToDouble()));
       }
     });
   }
 
+/**
+ *  When clicked, this function is triggered, it switch the graph that will be shown
+ */
   void switchGraph() {
     if (_graphSelect.value == false) {
       _graphSelect.value = true;
@@ -356,6 +373,7 @@ class ActivityController extends GetxController {
     }
   }
 
+// Used to call every function that will find the image to display in relation with the user's stats
   void updateAchievements() {
     findAssetsGoal();
     findAssetsMeal();
@@ -363,6 +381,7 @@ class ActivityController extends GetxController {
   }
 
   void findAssetsGoal() {
+    //If the user goal achieved number is ... then select a picture to display
     if (_goalAchieved >= 500) {
       _goalIndex.value = "5";
     } else if (_goalAchieved >= 250) {
@@ -379,6 +398,7 @@ class ActivityController extends GetxController {
   }
 
   void findAssetsMeal() {
+    //If the user meal eaten number is ... then select a picture to display
     if (_mealEaten >= 1000) {
       _mealIndex.value = "5";
     } else if (_mealEaten >= 500) {
@@ -395,6 +415,7 @@ class ActivityController extends GetxController {
   }
 
   void findAssetsCo2() {
+    //If the user co2 saved number is ... then select a picture to display
     if (_co2Saved.value >= 1460) {
       _co2Index.value = "5";
     } else if (_co2Saved.value >= 730) {
