@@ -26,6 +26,7 @@ class ActivityController extends GetxController {
   int _mealEaten;
 
   int _goalAchieved;
+  DateTime _isUpdated;
 
   final listCalories = [].obs;
   final listGoal = [].obs;
@@ -77,6 +78,12 @@ class ActivityController extends GetxController {
           values.firstWhere((element) => element.key == "mealEaten").value;
       _goalAchieved =
           values.firstWhere((element) => element.key == "goalAchieved").value;
+      _isUpdated = values
+          .firstWhere((element) => element.key == "isUpdated")
+          .value
+          .toDate();
+
+      print("${_isUpdated.day} DATEE");
 
       //Then we update ui
       updateProgressBar();
@@ -111,6 +118,25 @@ class ActivityController extends GetxController {
 
       //Then, the percentage of the progress bar is updated
       _percentageCalorie.value = _calorieEaten / _calorieGoal.value;
+
+      //If the user has 90% or more of the daily goal, it will be counted as achieved
+
+      if (_percentageCalorie.value >= 0.9) {
+        DateTime today = DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day);
+        if (_isUpdated.year != today.year ||
+            _isUpdated.month != today.month ||
+            _isUpdated.day != today.day) {
+          //Update database field
+          FirebaseFirestore.instance
+              .collection("all_users")
+              .doc(FirebaseAuth.instance.currentUser.uid)
+              .update({
+            'isUpdated': DateTime.now(),
+            'goalAchieved': FieldValue.increment(1)
+          });
+        }
+      }
     });
   }
 

@@ -53,7 +53,10 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
               FutureBuilder<Recipe>(
                 future: c.futureRecipe,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.data.docs.isEmpty) {
+                    return Text(
+                        "You've reached your maximal amount of calories for today.");
+                  } else if (snapshot.hasData) {
                     final List<dynamic> documents = snapshot.data.docs;
                     return ListView.builder(
                         physics: NeverScrollableScrollPhysics(),

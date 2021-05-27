@@ -267,8 +267,16 @@ class RecipeFeedController extends GetxController {
       mb -= result;
       print("Meal eaten today : $mealEaten ");
       print("mb 3 : $mb  et frequency $mealFrequency");
-      finalResult = mb /
-          ((mealFrequency - mealEaten) == 0 ? 1 : (mealFrequency - mealEaten));
+
+      //If the ammount of calories is negative, the user already reached maximum calories for today
+      if (mb < 0) {
+        finalResult = 0;
+      } else {
+        finalResult = mb /
+            ((mealFrequency - mealEaten) == 0
+                ? 1
+                : (mealFrequency - mealEaten));
+      }
     });
 
     return finalResult;

@@ -86,6 +86,10 @@ class AuthenticationController extends GetxController {
           'mealFrequency': 3,
           'gender': "male",
           'calorieGoal': 1800.0,
+          'mealEaten': 0,
+          'goalAchieved': 0,
+          'co2Saved': 0.0,
+          'isUpdated': DateTime.now().subtract(Duration(hours: 24)),
         }, SetOptions(merge: true));
       } //Then, redirect the user to Home Page
     }).then((value) => Get.off(() => HomePageView()));

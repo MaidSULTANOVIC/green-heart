@@ -28,7 +28,7 @@ class GraphCalories extends StatelessWidget {
         horizontalInterval: 500.0,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: Colors.grey[400],
+            color: Colors.grey[300],
             strokeWidth: 1,
           );
         },

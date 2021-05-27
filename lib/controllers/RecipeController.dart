@@ -116,12 +116,13 @@ class RecipeController extends GetxController {
     tableEat.add({
       'date': DateTime.now(),
       'meal': meal,
-    }).then(
-        (value) => Fluttertoast.showToast(msg: "Meal added to your history"));
+    }).then((value) {
+      Fluttertoast.showToast(msg: "Meal added to your history");
 
-    FirebaseFirestore.instance
-        .collection("all_user")
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .update({'mealEaten': FieldValue.increment(1)});
+      FirebaseFirestore.instance
+          .collection("all_user")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .update({'mealEaten': FieldValue.increment(1)});
+    });
   }
 }
