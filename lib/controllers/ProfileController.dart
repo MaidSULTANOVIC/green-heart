@@ -23,12 +23,22 @@ class ProfileController extends GetxController {
       .doc(FirebaseAuth.instance.currentUser.uid)
       .collection("likedRecipes");
 
+  DocumentReference documentReference = FirebaseFirestore.instance
+      .collection("all_users")
+      .doc(FirebaseAuth.instance.currentUser.uid);
+
   @override
   void onInit() {
     _futureGender = getGender();
     _futureBirthday = getBirthday();
+    addInfo();
     _futureFavourite = getFavourite();
     super.onInit();
+  }
+  
+  Future<void> addInfo() async {
+    await documentReference.set({"birthday" : futureBirthday});
+    await documentReference.set({"gender" : futureGender});
   }
 
   GoogleSignIn _googleSignIn = GoogleSignIn(
