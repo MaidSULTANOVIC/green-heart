@@ -8,7 +8,7 @@ import 'package:green_heart/view/RecipeView/RecipeView.dart';
 
 Container recipeCardQuery(
     String url, String title, double calories, LinkedHashMap map) {
-  RecipeFeedController c = Get.find();
+  RecipeFeedController c = Get.put(RecipeFeedController());
   return Container(
       height: 160.0,
       margin: const EdgeInsets.only(
