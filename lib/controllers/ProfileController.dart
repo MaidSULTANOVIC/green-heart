@@ -15,6 +15,9 @@ class ProfileController extends GetxController {
   Future<GoogleBirthday> _futureBirthday;
   Future<GoogleBirthday> get futureBirthday => this._futureBirthday;
 
+  Future<QuerySnapshot> _futureFavourite;
+  Future<QuerySnapshot> get futureFavourite => this._futureFavourite;
+
   CollectionReference tableFavorite = FirebaseFirestore.instance
       .collection("all_users")
       .doc(FirebaseAuth.instance.currentUser.uid)
@@ -24,6 +27,7 @@ class ProfileController extends GetxController {
   void onInit() {
     _futureGender = getGender();
     _futureBirthday = getBirthday();
+    _futureFavourite = getFavourite();
     super.onInit();
   }
 
@@ -58,5 +62,12 @@ class ProfileController extends GetxController {
     );
     GoogleBirthday googleBirthday = GoogleBirthday.fromJson(jsonDecode(response.body));
     return googleBirthday;
+  }
+
+  Future<QuerySnapshot> getFavourite() async {
+    return await FirebaseFirestore.instance
+        .collection('all_users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('likedRecipes').get();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/color.dart';
@@ -96,13 +97,18 @@ class _ProfileViewState extends State<ProfileView> {
                     FutureBuilder<GoogleBirthday>(
                         future: controller.futureBirthday,
                         builder: (context, snapshot) {
-                          final year = snapshot.data.year.toString();
-                          final month = snapshot.data.month.toString();
-                          final day = snapshot.data.day.toString();
-                          final date = year + "/" + month + "/" + day;
-                          return new Text(
-                              date
-                          );
+                          if (snapshot.hasData) {
+                            final year = snapshot.data.year.toString();
+                            final month = snapshot.data.month.toString();
+                            final day = snapshot.data.day.toString();
+                            final date = year + "/" + month + "/" + day;
+                            return new Text(
+                                date
+                            );
+                          } else if (snapshot.hasError) {
+                            return SafeArea(child: Text("${snapshot.error}"));
+                          }
+                          return CircularProgressIndicator();
                         })
                   ],
                 ),
@@ -113,12 +119,23 @@ class _ProfileViewState extends State<ProfileView> {
             child: Column(
               children: [
                 FutureBuilder<QuerySnapshot>(
-                  future:FirebaseFirestore.instance
-                      .collection('all_users')
-                      .doc(FirebaseAuth.instance.currentUser.uid)
-                      .collection('likedRecipes').get(),
+                  future: controller.futureFavourite,
                   builder: (context, snapshot) {
-                    print(snapshot.data);
+                    if (snapshot.hasData) {
+                      final List<QueryDocumentSnapshot> reference = snapshot.data.docs;
+                      print(snapshot.data.docs);
+                      return ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: reference.length,
+                          itemBuilder: (context, index) {
+                            return recipeCard(reference, index);
+                          });
+                    } else if (snapshot.hasError) {
+                      return SafeArea(child: Text("${snapshot.error}"));
+                    }
+                    return CircularProgressIndicator();
                   },
                 )
               ],
