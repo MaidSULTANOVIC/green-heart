@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:green_heart/color.dart';
 import 'package:green_heart/controllers/ProfileController.dart';
 import 'package:green_heart/models/GoogleBirthday.dart';
-import 'RecipeFeed/components/RecipeCard.dart';
+import 'components/recipeCardQuery.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -84,9 +86,14 @@ class _ProfileViewState extends State<ProfileView> {
                         future: controller.futureGender,
                         initialData: "Loading gender ...",
                         builder: (context, snapshot) {
-                          return new Text(
-                              snapshot.data
-                          );
+                          if (snapshot.hasData) {
+                            return new Text(
+                                snapshot.data
+                            );
+                          } else if (snapshot.hasError) {
+                            return SafeArea(child: Text("${snapshot.error}"));
+                          }
+                          return CircularProgressIndicator();
                         }),
                   ],
                 ),
@@ -122,22 +129,36 @@ class _ProfileViewState extends State<ProfileView> {
                   future: controller.futureFavourite,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      final List<QueryDocumentSnapshot> reference = snapshot.data.docs;
-                      print(snapshot.data.docs);
+                      final List<DocumentSnapshot> documents = snapshot.data.docs;
+
+
                       return ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: reference.length,
+                          itemCount: documents.length,
                           itemBuilder: (context, index) {
-                            return recipeCard(reference, index);
+                            LinkedHashMap<String, dynamic> map =
+                            new LinkedHashMap<String, dynamic>();
+                            map['id'] = documents[index]['meal']['id'];
+                            map['title'] = documents[index]['meal']['title'];
+                            map['image'] = documents[index]['meal']['image'];
+
+                            return recipeCardQuery(
+                                documents[index]['meal']['image'],
+                                documents[index]['meal']['title'],
+                                documents[index]['meal']['nutrition']
+                                ['nutrients'][0]['amount'],
+                                map);
                           });
+
                     } else if (snapshot.hasError) {
                       return SafeArea(child: Text("${snapshot.error}"));
                     }
+                    // By default, show a loading spinner.
                     return CircularProgressIndicator();
                   },
-                )
+                ),
               ],
             ),
           )

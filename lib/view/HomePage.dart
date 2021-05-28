@@ -3,7 +3,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:green_heart/color.dart';
 import 'package:green_heart/view/ActivityView.dart';
 import 'package:green_heart/view/HistoryView.dart';
-import 'package:green_heart/view/ProfileView.dart';
+import 'package:green_heart/view/ProfileView/ProfileView.dart';
 import 'package:green_heart/view/RecipeFeed/RecipeFeedView.dart';
 import 'package:green_heart/view/SettingsView.dart';
 
