@@ -40,9 +40,12 @@ class ProfileController extends GetxController {
   }
 
   Future<void> updateInfo() async {
+    //Wait for future to completes then set value into variables
     await _futureGender.then((value) => _gender = value);
     await _futureBirthday
         .then((value) => _age = getAge(value.year, value.month, value.day));
+
+    //Update database
     if (_age != 0 && _gender != "") {
       documentReference.update({"age": _age, "gender": _gender});
     }
