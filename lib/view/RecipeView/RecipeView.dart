@@ -23,7 +23,8 @@ class _RecipeViewState extends State<RecipeView> {
 
   @override
   void initState() {
-    c.initFuture(widget.meal.values.elementAt(0));
+    c.initFuture(
+        widget.meal.entries.firstWhere((element) => element.key == "id").value);
     super.initState();
   }
 
@@ -34,7 +35,10 @@ class _RecipeViewState extends State<RecipeView> {
           backgroundColor: Colors.white,
           elevation: 0.0,
           centerTitle: true,
-          title: Text(widget.meal.values.elementAt(1),
+          title: Text(
+              widget.meal.entries
+                  .firstWhere((element) => element.key == "title")
+                  .value,
               style: TextStyle(color: Colors.black)),
           leading: IconButton(
             icon: Icon(
@@ -66,7 +70,9 @@ class _RecipeViewState extends State<RecipeView> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
                   child: Image.network(
-                    widget.meal.values.elementAt(2),
+                    widget.meal.entries
+                        .firstWhere((element) => element.key == "image")
+                        .value,
                     filterQuality: FilterQuality.high,
                   ),
                 ),
