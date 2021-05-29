@@ -94,7 +94,10 @@ class RecipeController extends GetxController {
     // If the meal is already in favorite, he will be deleted of the favorite list
     if (_isFavorite.value == true) {
       tableFavorite
-          .where("id", isEqualTo: meal.values.elementAt(0))
+          .where("id",
+              isEqualTo: meal.entries
+                  .firstWhere((element) => element.key == "id")
+                  .value)
           .get()
           .then((value) {
         value.docs.forEach((element) {
@@ -105,7 +108,7 @@ class RecipeController extends GetxController {
     } else {
       // Else, if the meal is not in favorite, he will be added
       tableFavorite.doc().set({
-        'id': meal.values.elementAt(0),
+        'id': meal.entries.firstWhere((element) => element.key == "id").value,
         'meal': meal,
       }).then((value) => _isFavorite.value = true);
     }
@@ -116,7 +119,14 @@ class RecipeController extends GetxController {
     tableEat.add({
       'date': DateTime.now(),
       'meal': meal,
-    }).then(
-        (value) => Fluttertoast.showToast(msg: "Meal added to your history"));
+    }).then((value) {
+      Fluttertoast.showToast(msg: "Meal added to your history");
+
+      FirebaseFirestore.instance
+          .collection("all_users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .update({'mealEaten': FieldValue.increment(1)}).onError(
+              (error, stackTrace) => print("ERROR :::" + error.toString()));
+    });
   }
 }

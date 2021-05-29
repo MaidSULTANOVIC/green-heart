@@ -43,6 +43,7 @@ class RecipeFeedController extends GetxController {
   int awakeTimeMinute = -1;
   int mealFrequency = -1;
   int mealEaten = 0;
+  bool exists = false;
 
   Duration differenceTime;
 
@@ -54,8 +55,15 @@ class RecipeFeedController extends GetxController {
       } else {}
     });
 
-    getUserData();
     super.onInit();
+  }
+
+  void onInitChange() {
+    _healthDataList.clear();
+    _healthProfileList.clear();
+    mealEaten = 0;
+    mealFrequency = 0;
+    getUserData();
   }
 
   void disconnect() {
@@ -65,6 +73,20 @@ class RecipeFeedController extends GetxController {
   Future<void> getUserData() {
     //Get username of the user
     _username.value = FirebaseAuth.instance.currentUser.displayName;
+
+    firestore
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection("dailyGoalHistory")
+        .where('date',
+            isEqualTo: DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day))
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        exists = true;
+      }
+    });
 
     //We retrieve and store all user data
     firestore
@@ -236,17 +258,66 @@ class RecipeFeedController extends GetxController {
       });
 
       print("already eaten calories" + result.toString());
+      print("mb 1 : $mb");
       //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
       mb += (caloriesBurned - interval);
-      print(caloriesBurned - interval);
-
+      double calorieGoal = mb;
+      saveCalorieGoal(calorieGoal);
+      print("mb 2 : $mb");
       //The meals already eaten
       mb -= result;
       print("Meal eaten today : $mealEaten ");
+      print("mb 3 : $mb  et frequency $mealFrequency");
 
-      finalResult = mb / (mealFrequency - mealEaten);
+      //If the ammount of calories is negative, the user already reached maximum calories for today
+      if (mb < 0) {
+        finalResult = 0;
+      } else {
+        finalResult = mb /
+            ((mealFrequency - mealEaten) == 0
+                ? 1
+                : (mealFrequency - mealEaten));
+      }
     });
 
     return finalResult;
+  }
+
+  void saveCalorieGoal(double calorie) {
+    firestore
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .update({'dailyGoal': calorie});
+
+    if (!exists) {
+      firestore
+          .collection("all_users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("dailyGoalHistory")
+          .add({
+        'date': DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
+        'dailyGoal': calorie,
+      });
+
+      firestore
+          .collection("all_users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .update({'co2Saved': FieldValue.increment(2.03)});
+    } else {
+      firestore
+          .collection("all_users")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("dailyGoalHistory")
+          .where('date',
+              isEqualTo: DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day))
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          element.reference.update({'dailyGoal': calorie});
+        });
+      });
+    }
   }
 }
