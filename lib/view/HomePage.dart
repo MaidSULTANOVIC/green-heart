@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
-import 'package:green_heart/view/ActivityView.dart';
-import 'package:green_heart/view/HistoryView.dart';
+import 'package:green_heart/view/ActivityView/ActivityView.dart';
+import 'package:green_heart/view/HistoryView/HistoryView.dart';
 import 'package:green_heart/view/ProfileView.dart';
 import 'package:green_heart/view/RecipeFeed/RecipeFeedView.dart';
 import 'package:green_heart/view/SettingsView.dart';
@@ -22,6 +22,8 @@ class _HomePageViewState extends State<HomePageView> {
     SettingsView()
   ];
 
+  List<String> _titles = ["", "Activity", "Profile", "History", "Settings"];
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +39,8 @@ class _HomePageViewState extends State<HomePageView> {
               backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
               centerTitle: true,
-              title: Text("Test", style: TextStyle(color: Color(0xFF2D2F30)))),
+              title: Text(_titles[_currentIndex],
+                  style: TextStyle(color: Color(0xFF2D2F30)))),
       backgroundColor: Colors.white,
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
