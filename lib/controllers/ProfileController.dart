@@ -51,6 +51,10 @@ class ProfileController extends GetxController {
     }
   }
 
+  void getDiet(String diet)  {
+    documentReference.update({"diet": diet});
+  }
+
   GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       "https://www.googleapis.com/auth/user.birthday.read",

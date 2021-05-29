@@ -24,6 +24,7 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   User user = FirebaseAuth.instance.currentUser;
+  String dropdownValue = 'Vegetarian';
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class _ProfileViewState extends State<ProfileView> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            //container for the profile picture and name
             Container(
               decoration: BoxDecoration(
                   boxShadow: [
@@ -112,7 +114,7 @@ class _ProfileViewState extends State<ProfileView> {
                                   return new Text(
                                     snapshot.data,
                                     style: TextStyle(
-                                        fontSize: 20.0, color: Colors.white),
+                                        fontSize: 15.0, color: Colors.white),
                                   );
                                 } else if (snapshot.hasError) {
                                   return SafeArea(
@@ -157,7 +159,7 @@ class _ProfileViewState extends State<ProfileView> {
                                   final date = year + "/" + month + "/" + day;
                                   return new Text(date,
                                       style: TextStyle(
-                                          fontSize: 20.0, color: Colors.white));
+                                          fontSize: 15.0, color: Colors.white));
                                 } else if (snapshot.hasError) {
                                   return SafeArea(
                                       child: Text("${snapshot.error}"));
@@ -168,6 +170,44 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                   ),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_downward),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.black87),
+                        underline: Container(
+                          height: 2,
+                          color: blizzardBlue,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            dropdownValue = newValue;
+                            controller.getDiet(newValue);
+                          });
+                        },
+                        items: <String>['Vegetarian', 'Vegan']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
+                    child: Column(
+                      children: [
+                        Text("Wake up time",
+                            style: TextStyle(
+                                fontSize: 15.0, color: Colors.black87)
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
