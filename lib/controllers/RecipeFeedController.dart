@@ -198,7 +198,7 @@ class RecipeFeedController extends GetxController {
     double mb = 13.707 * weight +
         492.3 * height -
         6.673 * age +
-        (gender == "male" ? 667.051 : 77.607);
+        (gender == "Male" ? 667.051 : 77.607);
 
     // Minus 500 to lose weight
     mb -= 500;
