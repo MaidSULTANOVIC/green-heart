@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:green_heart/color.dart';
-import 'package:green_heart/view/ActivityView.dart';
-import 'package:green_heart/view/HistoryView.dart';
 import 'package:green_heart/view/ProfileView/ProfileView.dart';
 import 'package:green_heart/view/ActivityView/ActivityView.dart';
 import 'package:green_heart/view/HistoryView/HistoryView.dart';
-import 'package:green_heart/view/ProfileView.dart';
 import 'package:green_heart/view/RecipeFeed/RecipeFeedView.dart';
 import 'package:green_heart/view/SettingsView.dart';
 
@@ -36,45 +33,47 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _currentIndex == 0
-          ? null
-          : AppBar(
-              elevation: 10.0,
-              backgroundColor: celadon,
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              title: Text(_titles[_currentIndex],
-                  style: TextStyle(color: Color(0xFF2D2F30)))),
-      backgroundColor: Colors.white,
-      body: _children[_currentIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [BoxShadow(blurRadius: 10, color: Colors.grey, spreadRadius: 1)],
-        ),
-        child: BottomNavigationBar(
-          elevation: 50.0,
-          fixedColor: blizzardBlue,
-          type: BottomNavigationBarType.fixed,
-          onTap: (value) {
-            setState(() {
-              _currentIndex = value;
-            });
-          },
-          currentIndex: _currentIndex,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.house_rounded), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.stacked_line_chart_rounded), label: "Activity"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.perm_identity), label: "Profile"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.history), label: "History"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: "Settings")
-          ],
-        ),
-      )
-    );
+        appBar: _currentIndex == 0
+            ? null
+            : AppBar(
+                elevation: 10.0,
+                backgroundColor: celadon,
+                automaticallyImplyLeading: false,
+                centerTitle: true,
+                title: Text(_titles[_currentIndex],
+                    style: TextStyle(color: Color(0xFF2D2F30)))),
+        backgroundColor: Colors.white,
+        body: _children[_currentIndex],
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(blurRadius: 10, color: Colors.grey, spreadRadius: 1)
+            ],
+          ),
+          child: BottomNavigationBar(
+            elevation: 50.0,
+            fixedColor: blizzardBlue,
+            type: BottomNavigationBarType.fixed,
+            onTap: (value) {
+              setState(() {
+                _currentIndex = value;
+              });
+            },
+            currentIndex: _currentIndex,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.house_rounded), label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.stacked_line_chart_rounded),
+                  label: "Activity"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.perm_identity), label: "Profile"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.history), label: "History"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.settings), label: "Settings")
+            ],
+          ),
+        ));
   }
 }

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:green_heart/color.dart';
 import 'package:green_heart/controllers/ProfileController.dart';
 import 'package:green_heart/models/GoogleBirthday.dart';
-import 'components/recipeCardQuery.dart';
+import 'package:green_heart/view/RecipeFeed/components/RecipeCard.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -23,8 +23,9 @@ class _ProfileViewState extends State<ProfileView> {
     super.initState();
   }
 
-  @override
   User user = FirebaseAuth.instance.currentUser;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -86,7 +87,9 @@ class _ProfileViewState extends State<ProfileView> {
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                                blurRadius: 10, color: Colors.grey, spreadRadius: 1)
+                                blurRadius: 10,
+                                color: Colors.grey,
+                                spreadRadius: 1)
                           ],
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -95,7 +98,12 @@ class _ProfileViewState extends State<ProfileView> {
                           )),
                       child: Row(
                         children: [
-                          SizedBox(height: 40.0, child: Icon(Icons.person, color: Colors.white,)),
+                          SizedBox(
+                              height: 40.0,
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                              )),
                           FutureBuilder<String>(
                               future: controller.futureGender,
                               initialData: "Loading gender ...",
@@ -103,7 +111,8 @@ class _ProfileViewState extends State<ProfileView> {
                                 if (snapshot.hasData) {
                                   return new Text(
                                     snapshot.data,
-                                    style: TextStyle(fontSize: 20.0, color: Colors.white),
+                                    style: TextStyle(
+                                        fontSize: 20.0, color: Colors.white),
                                   );
                                 } else if (snapshot.hasError) {
                                   return SafeArea(
@@ -121,7 +130,9 @@ class _ProfileViewState extends State<ProfileView> {
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                                blurRadius: 10, color: Colors.grey, spreadRadius: 1)
+                                blurRadius: 10,
+                                color: Colors.grey,
+                                spreadRadius: 1)
                           ],
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -130,7 +141,12 @@ class _ProfileViewState extends State<ProfileView> {
                           )),
                       child: Row(
                         children: [
-                          SizedBox(height: 40.0, child: Icon(Icons.cake, color: Colors.white,)),
+                          SizedBox(
+                              height: 40.0,
+                              child: Icon(
+                                Icons.cake,
+                                color: Colors.white,
+                              )),
                           FutureBuilder<GoogleBirthday>(
                               future: controller.futureBirthday,
                               builder: (context, snapshot) {
@@ -139,10 +155,9 @@ class _ProfileViewState extends State<ProfileView> {
                                   final month = snapshot.data.month.toString();
                                   final day = snapshot.data.day.toString();
                                   final date = year + "/" + month + "/" + day;
-                                  return new Text(
-                                      date,
-                                      style: TextStyle(fontSize: 20.0, color: Colors.white)
-                                  );
+                                  return new Text(date,
+                                      style: TextStyle(
+                                          fontSize: 20.0, color: Colors.white));
                                 } else if (snapshot.hasError) {
                                   return SafeArea(
                                       child: Text("${snapshot.error}"));
@@ -160,31 +175,22 @@ class _ProfileViewState extends State<ProfileView> {
               future: controller.futureFavourite,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  final List<DocumentSnapshot> documents = snapshot.data.docs;
-
+                  List<DocumentSnapshot> documents = snapshot.data.docs;
+                  List<dynamic> documentsMeal = List<dynamic>();
+                  documents.forEach((element) {
+                    documentsMeal.add(element['meal']);
+                  });
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemCount: documents.length,
                       itemBuilder: (context, index) {
-                        LinkedHashMap<String, dynamic> map =
-                        new LinkedHashMap<String, dynamic>();
-                        map['id'] = documents[index]['meal']['id'];
-                        map['title'] = documents[index]['meal']['title'];
-                        map['image'] = documents[index]['meal']['image'];
-
-                        return recipeCardQuery(
-                            documents[index]['meal']['image'],
-                            documents[index]['meal']['title'],
-                            documents[index]['meal']['nutrition']['nutrients']
-                            [0]['amount'],
-                            map);
+                        return recipeCard(documentsMeal, index);
                       });
                 } else if (snapshot.hasError) {
-                  return SafeArea(child: Text("${snapshot.error}"));
+                  return Text("Error " + snapshot.error.toString());
                 }
-                // By default, show a loading spinner.
                 return CircularProgressIndicator();
               },
             )

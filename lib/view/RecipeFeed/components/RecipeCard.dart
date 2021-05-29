@@ -4,7 +4,12 @@ import 'package:green_heart/controllers/RecipeFeedController.dart';
 import 'package:green_heart/view/RecipeView/RecipeView.dart';
 
 Container recipeCard(List documents, int index) {
-  RecipeFeedController c = Get.find();
+  try {
+    RecipeFeedController c = Get.find();
+  } catch (e) {
+    RecipeFeedController c = Get.put(RecipeFeedController());
+  }
+
   return Container(
       height: 160.0,
       margin: const EdgeInsets.only(
