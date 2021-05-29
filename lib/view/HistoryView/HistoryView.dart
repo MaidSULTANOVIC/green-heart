@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/controllers/HistoryController.dart';
-import 'package:green_heart/view/HistoryView/components/RecipeQuery.dart';
 import 'package:green_heart/view/RecipeFeed/components/RecipeCard.dart';
 
 class HistoryView extends StatefulWidget {
