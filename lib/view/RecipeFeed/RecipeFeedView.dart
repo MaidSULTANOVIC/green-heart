@@ -1,13 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/controllers/RecipeFeedController.dart';
 import 'package:green_heart/models/Recipe.dart';
-import 'package:green_heart/view/Login/LoginView.dart';
 import 'package:green_heart/view/RecipeFeed/components/RecipeCard.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:io';
 
 class RecipeFeedView extends StatefulWidget {
   @override
@@ -46,7 +41,7 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
                 padding: const EdgeInsets.only(left: 16.0, top: 16.0),
                 child: Text("Your recipes",
                     style: TextStyle(
-                        color: Color(0xFF2D2F30),
+                        color: Colors.black54,
                         fontSize: 20.0,
                         fontWeight: FontWeight.w600)),
               ),

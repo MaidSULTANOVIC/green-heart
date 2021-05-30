@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/controllers/AuthController.dart';
-import 'package:green_heart/view/Register/RegisterView.dart';
 
 Material loginButton(TextStyle style, BuildContext context,
     TextEditingController emailAuth, TextEditingController passwordAuth) {

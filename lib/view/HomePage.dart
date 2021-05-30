@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:green_heart/color.dart';
+import 'package:green_heart/view/ProfileView/ProfileView.dart';
 import 'package:green_heart/view/ActivityView/ActivityView.dart';
 import 'package:green_heart/view/HistoryView/HistoryView.dart';
-import 'package:green_heart/view/ProfileView.dart';
 import 'package:green_heart/view/RecipeFeed/RecipeFeedView.dart';
 import 'package:green_heart/view/SettingsView.dart';
 

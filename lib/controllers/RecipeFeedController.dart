@@ -11,6 +11,7 @@ import 'package:green_heart/view/Login/LoginView.dart';
 import 'package:green_heart/view/RecipeFeed/RecipeFeedView.dart';
 import 'package:http/http.dart' as http;
 import "package:health/health.dart";
+import 'package:http/http.dart' as http;
 
 enum AppState {
   DATA_NOT_FETCHED,

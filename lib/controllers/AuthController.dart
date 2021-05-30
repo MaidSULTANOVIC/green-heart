@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:green_heart/models/GoogleBirthday.dart';
+import 'package:green_heart/services/age.dart';
 import 'package:green_heart/view/HomePage.dart';
+import 'package:http/http.dart' as http;
 
 class AuthenticationController extends GetxController {
+  GoogleSignInAccount googleUser;
+
   void login(String emailAuth, String passwordAuth) async {
     try {
       print(emailAuth + "//" + passwordAuth);
@@ -41,8 +48,7 @@ class AuthenticationController extends GetxController {
 
   Future<void> signInWithGoogle2() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
+    googleUser = await GoogleSignIn().signIn();
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -62,12 +68,46 @@ class AuthenticationController extends GetxController {
     });
   }
 
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      "https://www.googleapis.com/auth/user.birthday.read",
+      "https://www.googleapis.com/auth/user.gender.read"
+    ],
+  );
+
+  Future<String> getGender() async {
+    final headers = await googleUser.authHeaders;
+    final response = await http.get(
+        Uri.parse(
+            "https://people.googleapis.com/v1/people/me?personFields=genders"),
+        headers: {"Authorization": headers["Authorization"]});
+    final finalResponse = jsonDecode(response.body);
+    return finalResponse["genders"][0]["formattedValue"];
+  }
+
+  Future<int> getBirthday() async {
+    final headers = await googleUser.authHeaders;
+    final response = await http.get(
+        Uri.parse(
+            "https://people.googleapis.com/v1/people/me?personFields=birthdays"),
+        headers: {"Authorization": headers["Authorization"]});
+    GoogleBirthday googleBirthday =
+        GoogleBirthday.fromJson(jsonDecode(response.body));
+    return getAge(
+        googleBirthday.year, googleBirthday.month, googleBirthday.day);
+  }
+
 /**
  * If the user is a first time user, it will add a new document for him with his data, if he's already in the collection, nothing is done
  */
-  void checkUserFirebase() {
+  Future<void> checkUserFirebase() async {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     FirebaseFirestore firestore = FirebaseFirestore.instance;
+    int age = 18;
+    String gender = "Male";
+
+    await getBirthday().then((value) => age = value);
+    await getGender().then((value) => gender = value);
 
     //If the user doesn't exist in database, we create a new document for him with his user id and add default values
     firestore
@@ -80,11 +120,11 @@ class AuthenticationController extends GetxController {
             .collection("all_users")
             .doc(FirebaseAuth.instance.currentUser.uid)
             .set({
-          'age': 18,
+          'age': age,
           'awakeTimeHour': 7,
           'awakeTimeMinute': 30,
           'mealFrequency': 3,
-          'gender': "male",
+          'gender': gender,
           'calorieGoal': 1800.0,
           'mealEaten': 0,
           'goalAchieved': 0,
