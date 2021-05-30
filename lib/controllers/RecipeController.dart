@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/models/Ingredients.dart';
 import 'package:green_heart/models/Instructions.dart';
+import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:http/http.dart' as http;
 
 class RecipeController extends GetxController {
@@ -128,5 +129,42 @@ class RecipeController extends GetxController {
           .update({'mealEaten': FieldValue.increment(1)}).onError(
               (error, stackTrace) => print("ERROR :::" + error.toString()));
     });
+  }
+
+  Future<void> sendEmail(LinkedHashMap<String, dynamic> meal) async {
+    //Retrieve all the ingredients in a single String
+    String ingredients = "";
+    await futureIngredients.then((value) {
+      value.ingredients.forEach((element) {
+        ingredients += element["name"];
+        ingredients += " : ";
+        ingredients += element["amount"]["metric"]["value"].toString();
+        ingredients += " ";
+        ingredients += element["amount"]["metric"]["unit"].toString();
+        ingredients += "<br>";
+      });
+    });
+
+    //Retrieve all the instructions in a single String
+    String instructions = "";
+    await futureInstructions.then((value) {
+      value.instructions.forEach((element) {
+        instructions += "Step " + element['number'].toString();
+        instructions += " : <br>";
+        instructions += element['step'];
+        instructions += "<br><br>";
+      });
+    });
+
+    //Create the mail with informations of th recipe
+    final MailOptions mailOptions = MailOptions(
+      body: 'Hello! <br>I found a nice recipe using Green Heart, and I wanted to share it with you ! <br>' +
+          '<h1>Meal : ${meal['title']}</h1><h2>Ingredients : </h2> $ingredients <br> <br> <h2>Instructions : </h2> $instructions Find a picture of the meal here : ${meal['image']}</a>',
+      subject: 'I found a good recipe ! ',
+      isHTML: true,
+    );
+
+    //Send it
+    final MailerResponse response = await FlutterMailer.send(mailOptions);
   }
 }

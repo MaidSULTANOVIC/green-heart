@@ -16,7 +16,7 @@ class _HomePageViewState extends State<HomePageView> {
   int _currentIndex = 0;
 
   List<Widget> _children = [
-    //RecipeFeedView(),
+    RecipeFeedView(),
     ActivityView(),
     ProfileView(),
     HistoryView(),
@@ -33,47 +33,50 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _currentIndex == 0
-            ? null
-            : AppBar(
-                elevation: 10.0,
-                backgroundColor: celadon,
-                automaticallyImplyLeading: false,
-                centerTitle: true,
-                title: Text(_titles[_currentIndex],
-                    style: TextStyle(color: Color(0xFF2D2F30)))),
-        backgroundColor: Colors.white,
-        body: _children[_currentIndex],
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(blurRadius: 10, color: Colors.grey, spreadRadius: 1)
-            ],
-          ),
-          child: BottomNavigationBar(
-            elevation: 50.0,
-            fixedColor: blizzardBlue,
-            type: BottomNavigationBarType.fixed,
-            onTap: (value) {
-              setState(() {
-                _currentIndex = value;
-              });
-            },
-            currentIndex: _currentIndex,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.house_rounded), label: "Home"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.stacked_line_chart_rounded),
-                  label: "Activity"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.perm_identity), label: "Profile"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.history), label: "History"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), label: "Settings")
-            ],
-          ),
-        ));
+      appBar: _currentIndex == 0
+          ? null
+          : AppBar(
+              elevation: 0.0,
+              backgroundColor: Colors.white,
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: Text(_titles[_currentIndex],
+                  style: TextStyle(color: Color(0xFF2D2F30)))),
+      backgroundColor: Colors.white,
+      body: _children[_currentIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 5.0,
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          fixedColor: Color(0xFF36DC55),
+          type: BottomNavigationBarType.fixed,
+          onTap: (value) {
+            setState(() {
+              _currentIndex = value;
+            });
+          },
+          currentIndex: _currentIndex,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.house_rounded), label: "Home"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.stacked_line_chart_rounded),
+                label: "Activity"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.perm_identity), label: "Profile"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.history), label: "History"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: "Settings")
+          ],
+        ),
+      ),
+    );
   }
 }

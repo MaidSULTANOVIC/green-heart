@@ -14,11 +14,19 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        width: double.infinity,
         child: Column(
-      children: [
-        Text("SettingsView"),
-        FlatButton(onPressed: () => c.disconnect(), child: Text("logout temp")),
-      ],
-    ));
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 50.0,
+            ),
+            ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.white)),
+                onPressed: () => c.disconnect(),
+                child: Text("Log Out", style: TextStyle(color: Colors.black))),
+          ],
+        ));
   }
 }

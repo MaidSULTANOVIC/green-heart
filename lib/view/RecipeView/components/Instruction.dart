@@ -9,7 +9,10 @@ Container Instruction(List documents, int index) {
               color: Color(0xFFbf1717),
               fontSize: 15.0,
             )),
-        Text(documents[index]['step'])
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+          child: Text(documents[index]['step']),
+        )
       ],
     ),
   );

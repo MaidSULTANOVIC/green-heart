@@ -59,6 +59,10 @@ class _RecipeViewState extends State<RecipeView> {
                   ),
                 ),
                 onPressed: () => c.addFavorite(widget.meal)),
+            IconButton(
+              icon: Icon(Icons.send, color: Colors.black87),
+              onPressed: () => c.sendEmail(widget.meal),
+            ),
           ],
         ),
         body: SafeArea(
