@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
                         onPressed: () {
                           c.signInWithGoogle2();
                         },
-                        child: Text("Google signin")),
+                        child: Text("Google signin ")),
                   ],
                 ),
               ),
