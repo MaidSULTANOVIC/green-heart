@@ -43,26 +43,38 @@ class _HomePageViewState extends State<HomePageView> {
                   style: TextStyle(color: Color(0xFF2D2F30)))),
       backgroundColor: Colors.white,
       body: _children[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 20.0,
-        fixedColor: Color(0xFF36DC55),
-        type: BottomNavigationBarType.fixed,
-        onTap: (value) {
-          setState(() {
-            _currentIndex = value;
-          });
-        },
-        currentIndex: _currentIndex,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.house_rounded), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.stacked_line_chart_rounded), label: "Activity"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.perm_identity), label: "Profile"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings")
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 5.0,
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          fixedColor: Color(0xFF36DC55),
+          type: BottomNavigationBarType.fixed,
+          onTap: (value) {
+            setState(() {
+              _currentIndex = value;
+            });
+          },
+          currentIndex: _currentIndex,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.house_rounded), label: "Home"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.stacked_line_chart_rounded),
+                label: "Activity"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.perm_identity), label: "Profile"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.history), label: "History"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: "Settings")
+          ],
+        ),
       ),
     );
   }

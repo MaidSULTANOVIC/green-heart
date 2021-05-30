@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,6 +44,7 @@ class RecipeFeedController extends GetxController {
   int mealFrequency = -1;
   int mealEaten = 0;
   bool exists = false;
+  String diet = "";
 
   Duration differenceTime;
 
@@ -104,15 +106,20 @@ class RecipeFeedController extends GetxController {
           .value;
       mealFrequency =
           values.firstWhere((element) => element.key == "mealFrequency").value;
+      diet = values.firstWhere((element) => element.key == "diet").value;
     }).then((value) {
       fetchHealthData();
     });
   }
 
   Future<Recipe> fetchRecipe(int minCalories, int maxCalories) async {
+    //Select a random int to have random recipes each time
+    Random random = new Random();
+    int offset = random.nextInt(20);
+
     final response = await http.get(
       Uri.parse(
-          'https://api.spoonacular.com/recipes/complexSearch?apiKey=ed014e6f54164d6bbc778828ad05114c&diet=vegetarian&minCalories=$minCalories&maxCalories=$maxCalories&number=4'),
+          'https://api.spoonacular.com/recipes/complexSearch?apiKey=ed014e6f54164d6bbc778828ad05114c&diet=$diet&minCalories=$minCalories&maxCalories=$maxCalories&number=4&offset=$offset'),
     );
 
     if (response.statusCode == 200) {
@@ -219,7 +226,7 @@ class RecipeFeedController extends GetxController {
     double mb = 13.707 * weight +
         492.3 * height -
         6.673 * age +
-        (gender == "male" ? 667.051 : 77.607);
+        (gender == "Male" ? 667.051 : 77.607);
 
     // Minus 500 to lose weight
     mb -= 500;
