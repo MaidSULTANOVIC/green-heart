@@ -32,26 +32,29 @@ class _LoginViewState extends State<LoginView> {
       return HomePageView();
     } else {
       return Scaffold(
-        backgroundColor: Color(0xFF36DC55),
+        backgroundColor: Colors.white,
         body: Center(
           child: Container(
-            color: Color(0xFF36DC55),
+            color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(36.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: 120.0, child: Icon(Icons.nat_rounded)),
-                    SizedBox(height: 35.0),
-                    FlatButton(
-                        onPressed: () {
-                          c.signInWithGoogle2();
-                        },
-                        child: Text("Google signin ")),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/logo.png",
+                    scale: 1.5,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        c.signInWithGoogle2();
+                      },
+                      child: Image.asset(
+                        "assets/google_signin_light.png",
+                        scale: 1.7,
+                      )),
+                ],
               ),
             ),
           ),
