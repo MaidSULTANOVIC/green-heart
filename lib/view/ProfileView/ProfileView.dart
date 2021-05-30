@@ -9,6 +9,7 @@ import 'package:green_heart/color.dart';
 import 'package:green_heart/controllers/ProfileController.dart';
 import 'package:green_heart/models/GoogleBirthday.dart';
 import 'package:green_heart/view/RecipeFeed/components/RecipeCard.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -20,30 +21,85 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   void initState() {
+    controller.retrieveData();
     super.initState();
   }
 
   User user = FirebaseAuth.instance.currentUser;
-  String dropdownValue = 'Vegetarian';
+
+  void _changeTime() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => changeTime(context),
+    );
+  }
+
+  Widget changeTime(BuildContext context) {
+    int _value = 1;
+
+    return AlertDialog(
+      title: const Text('Select your awake time'),
+      content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Obx(() => Row(
+                  children: [
+                    Column(children: [
+                      Text("Hour"),
+                      NumberPicker(
+                        selectedTextStyle:
+                            TextStyle(color: Colors.green[400], fontSize: 25.0),
+                        value: controller.awakeHour.value,
+                        minValue: 0,
+                        maxValue: 23,
+                        onChanged: (value) =>
+                            controller.awakeHour.value = value,
+                      ),
+                    ]),
+                    Column(children: [
+                      Text("Minute"),
+                      NumberPicker(
+                        selectedTextStyle:
+                            TextStyle(color: Colors.green[400], fontSize: 25.0),
+                        value: controller.awakeMinute.value,
+                        minValue: 0,
+                        maxValue: 59,
+                        onChanged: (value) =>
+                            controller.awakeMinute.value = value,
+                      ),
+                    ])
+                  ],
+                ))
+          ],
+        );
+      }),
+      actions: <Widget>[
+        new TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+        ),
+        new TextButton(
+          child: Text("Update", style: TextStyle(color: Colors.black)),
+          onPressed: controller.updateAwakeTime,
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
+    return Container(
+      color: Colors.white,
+      child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             //container for the profile picture and name
             Container(
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 10, color: Colors.grey, spreadRadius: 1)
-                  ],
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [celadon, blizzardBlue],
-                  )),
               child: Container(
                 width: double.infinity,
                 height: 200.0,
@@ -73,7 +129,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                       Text(
                         user.displayName,
-                        style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        style: TextStyle(fontSize: 20.0, color: Colors.black),
                       ),
                     ],
                   ),
@@ -82,47 +138,49 @@ class _ProfileViewState extends State<ProfileView> {
             ),
             Container(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 50.0, 15.0, 0.0),
                     child: Container(
                       decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 10,
-                                color: Colors.grey,
-                                spreadRadius: 1)
-                          ],
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [celadon, blizzardBlue],
-                          )),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                              height: 40.0,
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              )),
-                          FutureBuilder<String>(
-                              future: controller.futureGender,
-                              initialData: "Loading gender ...",
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return new Text(
-                                    snapshot.data,
-                                    style: TextStyle(
-                                        fontSize: 15.0, color: Colors.white),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return SafeArea(
-                                      child: Text("${snapshot.error}"));
-                                }
-                                return CircularProgressIndicator();
-                              }),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 5,
+                              color: Colors.grey,
+                              spreadRadius: 1)
                         ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                                height: 40.0,
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.black,
+                                )),
+                            FutureBuilder<String>(
+                                future: controller.futureGender,
+                                initialData: "Loading gender ...",
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return new Text(
+                                      snapshot.data,
+                                      style: TextStyle(
+                                          fontSize: 15.0, color: Colors.black),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return SafeArea(
+                                        child: Text("${snapshot.error}"));
+                                  }
+                                  return CircularProgressIndicator();
+                                }),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -130,84 +188,96 @@ class _ProfileViewState extends State<ProfileView> {
                     padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
                     child: Container(
                       decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 10,
-                                color: Colors.grey,
-                                spreadRadius: 1)
-                          ],
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [celadon, blizzardBlue],
-                          )),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                              height: 40.0,
-                              child: Icon(
-                                Icons.cake,
-                                color: Colors.white,
-                              )),
-                          FutureBuilder<GoogleBirthday>(
-                              future: controller.futureBirthday,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  final year = snapshot.data.year.toString();
-                                  final month = snapshot.data.month.toString();
-                                  final day = snapshot.data.day.toString();
-                                  final date = year + "/" + month + "/" + day;
-                                  return new Text(date,
-                                      style: TextStyle(
-                                          fontSize: 15.0, color: Colors.white));
-                                } else if (snapshot.hasError) {
-                                  return SafeArea(
-                                      child: Text("${snapshot.error}"));
-                                }
-                                return CircularProgressIndicator();
-                              })
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 5,
+                              color: Colors.grey,
+                              spreadRadius: 1)
                         ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                                height: 40.0,
+                                child: Icon(
+                                  Icons.cake,
+                                  color: Colors.black,
+                                )),
+                            FutureBuilder<GoogleBirthday>(
+                                future: controller.futureBirthday,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    final year = snapshot.data.year.toString();
+                                    final month =
+                                        snapshot.data.month.toString();
+                                    final day = snapshot.data.day.toString();
+                                    final date = day + "/" + month + "/" + year;
+                                    return new Text(date,
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            color: Colors.black));
+                                  } else if (snapshot.hasError) {
+                                    return SafeArea(
+                                        child: Text("${snapshot.error}"));
+                                  }
+                                  return CircularProgressIndicator();
+                                })
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: const Icon(Icons.arrow_downward),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.black87),
-                        underline: Container(
-                          height: 2,
-                          color: blizzardBlue,
-                        ),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            dropdownValue = newValue;
-                            controller.getDiet(newValue);
-                          });
-                        },
-                        items: <String>['Vegetarian', 'Vegan']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      )
-                  ),
-                  Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
-                    child: Column(
+                    child: Row(
                       children: [
-                        Text("Wake up time",
+                        Text("Diet : ",
                             style: TextStyle(
-                                fontSize: 15.0, color: Colors.black87)
-                        )
+                                fontSize: 15.0, fontWeight: FontWeight.w500)),
+                        Obx(() => DropdownButton<String>(
+                              value: controller.dropDownValue.value,
+                              icon: const Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: const TextStyle(color: Colors.black87),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.black54,
+                              ),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  controller.updateDropDownSelected(newValue);
+                                  controller.updateDiet(newValue);
+                                });
+                              },
+                              items: <String>[
+                                'Vegetarian',
+                                'Vegan'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            )),
                       ],
                     ),
-                  )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
+                    child: ElevatedButton(
+                      onPressed: _changeTime,
+                      child: Text("Change awake time",
+                          style: TextStyle(color: Colors.black)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white70)),
+                    ),
+                  ),
                 ],
               ),
             ),

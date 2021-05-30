@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:green_heart/models/GoogleBirthday.dart';
@@ -17,6 +18,18 @@ class ProfileController extends GetxController {
 
   Future<QuerySnapshot> _futureFavourite;
   Future<QuerySnapshot> get futureFavourite => this._futureFavourite;
+
+  RxString _dropDownValue = "Vegetarian".obs;
+  RxString get dropDownValue => this._dropDownValue;
+
+  RxInt _awakeHour = 0.obs;
+  RxInt get awakeHour => this._awakeHour;
+
+  RxInt _awakeMinute = 0.obs;
+  RxInt get awakeMinute => this._awakeMinute;
+
+  RxInt _mealFrequency = 0.obs;
+  RxInt get mealFrequency => this._mealFrequency;
 
   int _age = 0;
   String _gender = "";
@@ -51,8 +64,43 @@ class ProfileController extends GetxController {
     }
   }
 
-  void getDiet(String diet)  {
-    documentReference.update({"diet": diet});
+  void retrieveData() {
+    //We retrieve and store all user data
+    FirebaseFirestore.instance
+        .collection("all_users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((value) {
+      Iterable<MapEntry<String, dynamic>> values = value.data().entries;
+
+      _awakeHour.value =
+          values.firstWhere((element) => element.key == "awakeTimeHour").value;
+      _awakeMinute.value = values
+          .firstWhere((element) => element.key == "awakeTimeMinute")
+          .value;
+      _mealFrequency.value =
+          values.firstWhere((element) => element.key == "mealFrequency").value;
+      _dropDownValue.value = values
+          .firstWhere((element) => element.key == "diet")
+          .value
+          .toString()
+          .capitalizeFirst;
+    });
+  }
+
+  void updateAwakeTime() {
+    documentReference.update({
+      "awakeTimeHour": _awakeHour.value,
+      "awakeTimeMinute": _awakeMinute.value,
+    }).then((value) => Get.back());
+  }
+
+  void updateDropDownSelected(String newValue) {
+    _dropDownValue.value = newValue;
+  }
+
+  void updateDiet(String diet) {
+    documentReference.update({"diet": diet.toLowerCase()});
   }
 
   GoogleSignIn _googleSignIn = GoogleSignIn(
