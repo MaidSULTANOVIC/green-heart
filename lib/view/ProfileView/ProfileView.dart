@@ -46,6 +46,7 @@ class _ProfileViewState extends State<ProfileView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Obx(() => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Column(children: [
                       Text("Hour"),
@@ -249,10 +250,8 @@ class _ProfileViewState extends State<ProfileView> {
                                 color: Colors.black54,
                               ),
                               onChanged: (String newValue) {
-                                setState(() {
-                                  controller.updateDropDownSelected(newValue);
-                                  controller.updateDiet(newValue);
-                                });
+                                controller.updateDropDownSelected(newValue);
+                                controller.updateDiet(newValue);
                               },
                               items: <String>[
                                 'Vegetarian',
@@ -278,9 +277,51 @@ class _ProfileViewState extends State<ProfileView> {
                               MaterialStateProperty.all(Colors.white70)),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
+                    child: Row(
+                      children: [
+                        Text("Meal Frequency : ",
+                            style: TextStyle(
+                                fontSize: 15.0, fontWeight: FontWeight.w500)),
+                        Obx(() => DropdownButton<int>(
+                              value: controller.mealFrequency.value,
+                              icon: const Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: const TextStyle(color: Colors.black87),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.black54,
+                              ),
+                              onChanged: (int newValue) {
+                                controller.updateMealFrequency(newValue);
+                              },
+                              items: <int>[1, 2, 3, 4, 5, 6, 7]
+                                  .map<DropdownMenuItem<int>>((int value) {
+                                return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: Text(value.toString()),
+                                );
+                              }).toList(),
+                            )),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
+            Divider(
+              height: 30.0,
+              color: Colors.black,
+              indent: 100.0,
+              endIndent: 100.0,
+            ),
+            Text("Your favorite meals : ",
+                style: TextStyle(
+                    color: Colors.green[400],
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20.0)),
             FutureBuilder<QuerySnapshot>(
               future: controller.futureFavourite,
               builder: (context, snapshot) {

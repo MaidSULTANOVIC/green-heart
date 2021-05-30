@@ -99,6 +99,11 @@ class ProfileController extends GetxController {
     _dropDownValue.value = newValue;
   }
 
+  void updateMealFrequency(int newValue) {
+    _mealFrequency.value = newValue;
+    documentReference.update({"mealFrequency": newValue});
+  }
+
   void updateDiet(String diet) {
     documentReference.update({"diet": diet.toLowerCase()});
   }
