@@ -42,9 +42,42 @@ class _LoginViewState extends State<LoginView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Image.asset(
-                    "assets/logo.png",
-                    scale: 1.5,
+                  Column(
+                    children: [
+                      Image.asset(
+                        "assets/logo.png",
+                        scale: 1.3,
+                      ),
+                      SizedBox(height: 15.0),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text: "Eating healthy and green is ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 28.0,
+                                color: Colors.black),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: "easier",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 28.0,
+                                      color: Colors.green[400])),
+                              TextSpan(
+                                  text: " than you think!",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 28.0,
+                                  )),
+                            ]),
+                      ),
+                      SizedBox(height: 15.0),
+                      Text("Sign in will take only few seconds",
+                          style: TextStyle(
+                              color: Colors.black38,
+                              fontWeight: FontWeight.w500))
+                    ],
                   ),
                   TextButton(
                       onPressed: () {
