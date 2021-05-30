@@ -37,7 +37,8 @@ class _ActivityViewState extends State<ActivityView> {
               SizedBox(
                 width: 10.0,
               ),
-              Obx(() => Text("${c.co2Saved.value} metric kg of CO2",
+              Obx(() => Text(
+                  "${c.co2Saved.value.toStringAsFixed(2)} metric kg of CO2",
                   style: TextStyle(color: Colors.green[400]))),
             ],
           ),
