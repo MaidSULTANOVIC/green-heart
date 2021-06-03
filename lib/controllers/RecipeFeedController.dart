@@ -13,14 +13,6 @@ import 'package:http/http.dart' as http;
 import "package:health/health.dart";
 import 'package:http/http.dart' as http;
 
-enum AppState {
-  DATA_NOT_FETCHED,
-  FETCHING_DATA,
-  DATA_READY,
-  NO_DATA,
-  AUTH_NOT_GRANTED
-}
-
 class RecipeFeedController extends GetxController {
   Future<Recipe> _futureRecipe;
 
@@ -66,10 +58,6 @@ class RecipeFeedController extends GetxController {
     mealEaten = 0;
     mealFrequency = 0;
     getUserData();
-  }
-
-  void disconnect() {
-    FirebaseAuth.instance.signOut();
   }
 
   Future<void> getUserData() {
@@ -126,7 +114,8 @@ class RecipeFeedController extends GetxController {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      return Recipe.fromJson(jsonDecode(response.body));
+      Recipe recipe = Recipe.fromJson(jsonDecode(response.body));
+      return recipe;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -265,12 +254,12 @@ class RecipeFeedController extends GetxController {
       });
 
       print("already eaten calories" + result.toString());
-      print("mb 1 : $mb");
+
       //If the user did sports or physical activity, the caloriesBurned will be higher than the usual calories when you dont do sports
       mb += (caloriesBurned - interval);
       double calorieGoal = mb;
       saveCalorieGoal(calorieGoal);
-      print("mb 2 : $mb");
+
       //The meals already eaten
       mb -= result;
       print("Meal eaten today : $mealEaten ");

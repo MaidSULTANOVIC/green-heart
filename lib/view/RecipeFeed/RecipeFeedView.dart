@@ -14,7 +14,6 @@ class _RecipeFeedViewState extends State<RecipeFeedView> {
 
   @override
   void initState() {
-    print("iieaiz");
     c.onInitChange();
     super.initState();
   }

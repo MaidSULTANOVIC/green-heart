@@ -83,8 +83,6 @@ class ActivityController extends GetxController {
           .value
           .toDate();
 
-      print("${_isUpdated.day} DATEE");
-
       //Then we update ui
       updateProgressBar();
       updateAchievements();
@@ -166,7 +164,7 @@ class ActivityController extends GetxController {
             .value['nutrition']['nutrients'][0]['amount'];
         nb++;
       });
-      print("THREE MONTH");
+
       if (nb == 0.0) {
         listCalories.add(new FlSpot(0, 0));
       } else {
@@ -196,7 +194,6 @@ class ActivityController extends GetxController {
         nb++;
       });
 
-      print("TWO MONTH");
       if (nb == 0.0) {
         listCalories.add(new FlSpot(4, 0));
       } else {
@@ -226,7 +223,6 @@ class ActivityController extends GetxController {
         nb++;
       });
 
-      print("ONE MONTH");
       if (nb == 0.0) {
         listCalories.add(new FlSpot(8, 0));
       } else {
@@ -253,7 +249,6 @@ class ActivityController extends GetxController {
             .value['nutrition']['nutrients'][0]['amount'];
         nb = nb + 1;
       });
-      print("THIS MONTH");
 
       if (nb == 0.0) {
         listCalories.add(new FlSpot(11, 0));
@@ -290,7 +285,7 @@ class ActivityController extends GetxController {
             .value;
         nb++;
       });
-      print("THREE MONTH");
+
       if (nb == 0.0) {
         listGoal.add(new FlSpot(0, 0));
       } else {
@@ -320,7 +315,6 @@ class ActivityController extends GetxController {
         nb++;
       });
 
-      print("TWO MONTH");
       if (nb == 0.0) {
         listGoal.add(new FlSpot(4, 0));
       } else {
@@ -350,7 +344,6 @@ class ActivityController extends GetxController {
         nb++;
       });
 
-      print("ONE MONTH");
       if (nb == 0.0) {
         listGoal.add(new FlSpot(8, 0));
       } else {
@@ -377,7 +370,6 @@ class ActivityController extends GetxController {
             .value;
         nb = nb + 1;
       });
-      print("THIS MONTH");
 
       if (nb == 0.0) {
         listGoal.add(new FlSpot(11, 0));

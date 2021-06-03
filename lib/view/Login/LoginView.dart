@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_heart/controllers/AuthController.dart';
 import 'package:green_heart/view/HomePage.dart';
-import 'package:green_heart/view/Register/RegisterView.dart';
 
 import '../../color.dart';
-import 'components/button.dart';
-import 'components/fields.dart';
 
 class LoginView extends StatefulWidget {
   @override

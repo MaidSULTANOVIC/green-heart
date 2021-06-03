@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:green_heart/models/GoogleBirthday.dart';
-import 'package:green_heart/services/age.dart';
+import 'package:green_heart/services/Age.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

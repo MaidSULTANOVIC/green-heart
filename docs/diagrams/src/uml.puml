@@ -1,0 +1,336 @@
+@startuml
+set namespaceSeparator ::
+
+class "green_heart::models::GoogleUser.dart::GoogleUser" {
+  +List<dynamic>* docs
+}
+
+class "green_heart::models::Ingredients.dart::Ingredients" {
+  +List<dynamic>* ingredients
+}
+
+class "green_heart::models::Instructions.dart::Instructions" {
+  +List<dynamic>* instructions
+}
+
+class "green_heart::models::GoogleBirthday.dart::GoogleBirthday" {
+  +int* year
+  +int* month
+  +int* day
+}
+
+class "green_heart::models::Recipe.dart::Recipe" {
+  +List<dynamic>* docs
+}
+
+class "green_heart::view::HomePage.dart::HomePageView" {
+  +_HomePageViewState* createState()
+}
+
+class "green_heart::view::HomePage.dart::_HomePageViewState" {
+  -int* _currentIndex
+  -List<Widget*>* _children
+  -List<String*>* _titles
+  +void initState()
+  +Widget* build()
+}
+
+class "green_heart::view::SettingsView.dart::SettingsView" {
+  +_SettingsViewState* createState()
+}
+
+class "green_heart::view::SettingsView.dart::_SettingsViewState" {
+  +SettingsController* c
+  +Widget* build()
+}
+
+"green_heart::view::SettingsView.dart::_SettingsViewState" o-- "green_heart::controllers::SettingsController.dart::SettingsController"
+
+class "green_heart::view::ProfileView::ProfileView.dart::ProfileView" {
+  +_ProfileViewState* createState()
+}
+
+class "green_heart::view::ProfileView::ProfileView.dart::_ProfileViewState" {
+  +ProfileController* controller
+  +User* user
+  +void initState()
+  -void _changeTime()
+  +Widget* changeTime()
+  +Widget* build()
+}
+
+"green_heart::view::ProfileView::ProfileView.dart::_ProfileViewState" o-- "green_heart::controllers::ProfileController.dart::ProfileController"
+"green_heart::view::ProfileView::ProfileView.dart::_ProfileViewState" o-- "firebase_auth::firebase_auth.dart::User"
+
+class "green_heart::view::RecipeFeed::RecipeFeedView.dart::RecipeFeedView" {
+  +_RecipeFeedViewState* createState()
+}
+
+class "green_heart::view::RecipeFeed::RecipeFeedView.dart::_RecipeFeedViewState" {
+  +RecipeFeedController* c
+  +void initState()
+  +Widget* build()
+}
+
+"green_heart::view::RecipeFeed::RecipeFeedView.dart::_RecipeFeedViewState" o-- "green_heart::controllers::RecipeFeedController.dart::RecipeFeedController"
+
+class "green_heart::view::Login::LoginView.dart::LoginView" {
+  +_LoginViewState* createState()
+}
+
+class "green_heart::view::Login::LoginView.dart::_LoginViewState" {
+  +TextStyle* style
+  +TextEditingController* emailAuth
+  +TextEditingController* passwordAuth
+  +AuthenticationController* c
+  +Widget* build()
+}
+
+"green_heart::view::Login::LoginView.dart::_LoginViewState" o-- "flutter::src::painting::text_style.dart::TextStyle"
+"green_heart::view::Login::LoginView.dart::_LoginViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"green_heart::view::Login::LoginView.dart::_LoginViewState" o-- "green_heart::controllers::AuthController.dart::AuthenticationController"
+
+class "green_heart::view::RecipeView::RecipeView.dart::RecipeView" {
+  +LinkedHashMap<String*, dynamic>* meal
+  +_RecipeViewState* createState()
+}
+
+"green_heart::view::RecipeView::RecipeView.dart::RecipeView" o-- "dart::collection::LinkedHashMap<String, dynamic>"
+
+class "green_heart::view::RecipeView::RecipeView.dart::_RecipeViewState" {
+  +RecipeController* c
+  +void initState()
+  +Widget* build()
+}
+
+"green_heart::view::RecipeView::RecipeView.dart::_RecipeViewState" o-- "green_heart::controllers::RecipeController.dart::RecipeController"
+
+class "green_heart::view::ActivityView::ActivityView.dart::ActivityView" {
+  +_ActivityViewState* createState()
+}
+
+class "green_heart::view::ActivityView::ActivityView.dart::_ActivityViewState" {
+  +ActivityController* c
+  +void initState()
+  +Widget* build()
+}
+
+"green_heart::view::ActivityView::ActivityView.dart::_ActivityViewState" o-- "green_heart::controllers::ActivityController.dart::ActivityController"
+
+class "green_heart::view::ActivityView::components::GraphGoal.dart::GraphGoal" {
+  +ActivityController* c
+  +List<Color*>* gradientColors
+  +Widget* build()
+  +LineChartData* sampleData1()
+}
+
+"green_heart::view::ActivityView::components::GraphGoal.dart::GraphGoal" o-- "green_heart::controllers::ActivityController.dart::ActivityController"
+
+class "green_heart::view::ActivityView::components::GraphCalories.dart::GraphCalories" {
+  +ActivityController* c
+  +List<Color*>* gradientColors
+  +Widget* build()
+  +LineChartData* sampleData1()
+}
+
+"green_heart::view::ActivityView::components::GraphCalories.dart::GraphCalories" o-- "green_heart::controllers::ActivityController.dart::ActivityController"
+
+class "green_heart::view::ActivityView::components::CalorieGoal.dart::CalorieGoal" {
+  +ActivityController* c
+  +Widget* build()
+}
+
+"green_heart::view::ActivityView::components::CalorieGoal.dart::CalorieGoal" o-- "green_heart::controllers::ActivityController.dart::ActivityController"
+
+class "green_heart::view::HistoryView::HistoryView.dart::HistoryView" {
+  +_HistoryViewState* createState()
+}
+
+class "green_heart::view::HistoryView::HistoryView.dart::_HistoryViewState" {
+  +HistoryController* c
+  +Widget* build()
+}
+
+"green_heart::view::HistoryView::HistoryView.dart::_HistoryViewState" o-- "green_heart::controllers::HistoryController.dart::HistoryController"
+
+class "green_heart::main.dart::MyApp" {
+  +SystemUiOverlayStyle* mySystemTheme
+  +Widget* build()
+}
+
+"green_heart::main.dart::MyApp" o-- "flutter::src::services::system_chrome.dart::SystemUiOverlayStyle"
+
+class "green_heart::main.dart::MyHomePage" {
+  +String* title
+  +_MyHomePageState* createState()
+}
+
+class "green_heart::main.dart::_MyHomePageState" {
+  -bool* _initialized
+  -bool* _error
+  -Future<FirebaseApp*>* _initialization
+  +Widget* build()
+}
+
+class "green_heart::controllers::HistoryController.dart::HistoryController" {
+  -Stream<QuerySnapshot<Object*>*>* _futureHistory
+  +Stream<QuerySnapshot<Object*>*>* futureHistory
+  +void onInit()
+  +Stream<QuerySnapshot<Object*>*>* getHistory()
+}
+
+"green_heart::controllers::HistoryController.dart::HistoryController" o-- "dart::async::Stream<QuerySnapshot<Object>>"
+
+class "green_heart::controllers::ProfileController.dart::ProfileController" {
+  -Future<String*>* _futureGender
+  -Future<GoogleBirthday*>* _futureBirthday
+  -Future<QuerySnapshot<Object*>*>* _futureFavourite
+  -RxString* _dropDownValue
+  -RxInt* _awakeHour
+  -RxInt* _awakeMinute
+  -RxInt* _mealFrequency
+  -int* _age
+  -String* _gender
+  +CollectionReference<Object*>* tableFavorite
+  +DocumentReference<Object*>* documentReference
+  -GoogleSignIn* _googleSignIn
+  +Future<String*>* futureGender
+  +Future<GoogleBirthday*>* futureBirthday
+  +Future<QuerySnapshot<Object*>*>* futureFavourite
+  +RxString* dropDownValue
+  +RxInt* awakeHour
+  +RxInt* awakeMinute
+  +RxInt* mealFrequency
+  +void onInit()
+  +Future<void>* updateInfo()
+  +void retrieveData()
+  +void updateAwakeTime()
+  +void updateDropDownSelected()
+  +void updateMealFrequency()
+  +void updateDiet()
+  +Future<String*>* getGender()
+  +Future<GoogleBirthday*>* getBirthday()
+  +Future<QuerySnapshot<Object*>*>* getFavourite()
+}
+
+"green_heart::controllers::ProfileController.dart::ProfileController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"green_heart::controllers::ProfileController.dart::ProfileController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxInt"
+"green_heart::controllers::ProfileController.dart::ProfileController" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"green_heart::controllers::ProfileController.dart::ProfileController" o-- "cloud_firestore::cloud_firestore.dart::DocumentReference<Object>"
+"green_heart::controllers::ProfileController.dart::ProfileController" o-- "google_sign_in::google_sign_in.dart::GoogleSignIn"
+
+class "green_heart::controllers::ActivityController.dart::ActivityController" {
+  -RxInt* _calorieGoal
+  -double* _calorieEaten
+  -RxDouble* _percentageCalorie
+  -RxDouble* _co2Saved
+  -RxString* _goalIndex
+  -RxString* _mealIndex
+  -RxString* _co2Index
+  -int* _mealEaten
+  -int* _goalAchieved
+  -DateTime* _isUpdated
+  +RxList<dynamic>* listCalories
+  +RxList<dynamic>* listGoal
+  +int* awakeTimeHour
+  +int* awakeTimeMinute
+  -RxBool* _graphSelect
+  +RxInt* calorieGoal
+  +RxDouble* percentageCalorie
+  +RxDouble* co2Saved
+  +RxString* goalIndex
+  +RxString* mealIndex
+  +RxString* co2Index
+  +RxBool* graphSelect
+  +void onInit()
+  +void initOnChange()
+  +void getCalorieGoal()
+  +void updateProgressBar()
+  +Future<void>* updateCaloriesList()
+  +Future<void>* updateGoalList()
+  +void switchGraph()
+  +void updateAchievements()
+  +void findAssetsGoal()
+  +void findAssetsMeal()
+  +void findAssetsCo2()
+}
+
+"green_heart::controllers::ActivityController.dart::ActivityController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxInt"
+"green_heart::controllers::ActivityController.dart::ActivityController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxDouble"
+"green_heart::controllers::ActivityController.dart::ActivityController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"green_heart::controllers::ActivityController.dart::ActivityController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<dynamic>"
+"green_heart::controllers::ActivityController.dart::ActivityController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+
+class "green_heart::controllers::AuthController.dart::AuthenticationController" {
+  +GoogleSignInAccount* googleUser
+  -GoogleSignIn* _googleSignIn
+  +Future<void>* signInWithGoogle2()
+  +Future<String*>* getGender()
+  +Future<int*>* getBirthday()
+  +Future<void>* checkUserFirebase()
+}
+
+"green_heart::controllers::AuthController.dart::AuthenticationController" o-- "google_sign_in::google_sign_in.dart::GoogleSignInAccount"
+"green_heart::controllers::AuthController.dart::AuthenticationController" o-- "google_sign_in::google_sign_in.dart::GoogleSignIn"
+
+class "green_heart::controllers::RecipeController.dart::RecipeController" {
+  -Future<Ingredients*>* _futureIngredients
+  -Future<Instructions*>* _futureInstructions
+  -RxBool* _isFavorite
+  +CollectionReference<Object*>* tableFavorite
+  +CollectionReference<Object*>* tableEat
+  +Future<Ingredients*>* futureIngredients
+  +Future<Instructions*>* futureInstructions
+  +RxBool* isFavorite
+  +void onInit()
+  +void initFuture()
+  +Future<Ingredients*>* fetchIngredients()
+  +Future<Instructions*>* fetchInstructions()
+  +void checkFavorite()
+  +void addFavorite()
+  +void eatMeal()
+  +Future<void>* sendEmail()
+}
+
+"green_heart::controllers::RecipeController.dart::RecipeController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"green_heart::controllers::RecipeController.dart::RecipeController" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+class "green_heart::controllers::SettingsController.dart::SettingsController" {
+  +void onInit()
+  +void disconnect()
+}
+
+class "green_heart::controllers::RecipeFeedController.dart::RecipeFeedController" {
+  -Future<Recipe*>* _futureRecipe
+  -RxString* _username
+  +double* height
+  +double* weight
+  -List<HealthDataPoint*>* _healthDataList
+  -List<HealthDataPoint*>* _healthProfileList
+  -Future<FirebaseApp*>* _initialization
+  +FirebaseFirestore* firestore
+  +int* age
+  +String* gender
+  +int* awakeTimeHour
+  +int* awakeTimeMinute
+  +int* mealFrequency
+  +int* mealEaten
+  +bool* exists
+  +String* diet
+  +Duration* differenceTime
+  +Future<Recipe*>* futureRecipe
+  +String* username
+  +void onInit()
+  +void onInitChange()
+  +Future<void>* getUserData()
+  +Future<Recipe*>* fetchRecipe()
+  +Future<void>* fetchHealthData()
+  +Future<double*>* calculateCalories()
+  +void saveCalorieGoal()
+}
+
+"green_heart::controllers::RecipeFeedController.dart::RecipeFeedController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"green_heart::controllers::RecipeFeedController.dart::RecipeFeedController" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+
+@enduml
