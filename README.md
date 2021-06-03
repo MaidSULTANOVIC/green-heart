@@ -10,7 +10,10 @@ The aim of the project was to develop an application that helped the user commit
 
 ## Presentation
 
-You can find a link to a video presentation of the app [here (youtube link)](https://youtu.be/JXlXKqSU5RY).  
+You can find a link to a video presentation of the app [here (youtube link)](https://youtu.be/JXlXKqSU5RY).    
+
+Here are some picture of the app
+
 ![login](https://cdn.discordapp.com/attachments/764647594667933727/850080360606990336/unknown.png) ![feed](https://cdn.discordapp.com/attachments/764647594667933727/850080682545250304/unknown.png) ![activity](https://cdn.discordapp.com/attachments/764647594667933727/850080967787806797/unknown.png)
 
 
