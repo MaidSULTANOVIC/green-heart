@@ -22,6 +22,7 @@ Because the app is not released, in order to access the app (even if you have th
 
 Then, you need to `flutter pubg get` and `flutter run`
 
+You can find [documentation in the repo](https://github.com/MaidSULTANOVIC/green-heart/tree/main/docs/diagrams).
 
 ## Authors
 
@@ -30,6 +31,6 @@ Then, you need to `flutter pubg get` and `flutter run`
 [adededede](https://github.com/adededede)  
 GBE Team   
 
-## Licence
+## License
 
-Green Heart's code is licensed under the MIT licence. Please see the licence file for more information. tl;dr you can do whatever you want as long as you include the original copyright and license notice in any copy of the software/source.
+Green Heart's code is licensed under the [MIT license](https://opensource.org/licenses/MIT). Please see the [license file](https://github.com/MaidSULTANOVIC/green-heart/blob/main/LICENSE) for more information. [tl;dr](https://tldrlegal.com/license/mit-license) you can do whatever you want as long as you include the original copyright and license notice in any copy of the software/source.
