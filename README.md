@@ -14,7 +14,7 @@ You can find a link to a video presentation of the app [here (youtube link)](htt
 
 Here are some picture of the app
 
-![login](https://cdn.discordapp.com/attachments/764647594667933727/850080360606990336/unknown.png) ![feed](https://cdn.discordapp.com/attachments/764647594667933727/850080682545250304/unknown.png) ![activity](https://cdn.discordapp.com/attachments/764647594667933727/850080967787806797/unknown.png)
+![login](https://cdn.discordapp.com/attachments/764647594667933727/850288671345344542/unknown.png) ![feed](https://cdn.discordapp.com/attachments/764647594667933727/850080682545250304/unknown.png) ![activity](https://cdn.discordapp.com/attachments/764647594667933727/850080967787806797/unknown.png)
 
 
 ## Building

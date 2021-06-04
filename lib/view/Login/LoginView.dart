@@ -43,8 +43,9 @@ class _LoginViewState extends State<LoginView> {
                   Column(
                     children: [
                       Image.asset(
-                        "assets/logo.png",
-                        scale: 1.3,
+                        "assets/gh.png",
+                        scale: 1.2,
+                        height: 215.0,
                       ),
                       SizedBox(height: 15.0),
                       RichText(
